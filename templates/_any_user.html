@@ -1,0 +1,15 @@
+<div class="card mb-3 ml-2 mr-2">
+    <div class="card-header">
+    <img src="{{ user.avatar(36) }}" alt="Card image cap">
+            <h5 class="card-title"> {{ user.username }}</h5>
+            <p> {{ roles[user.role] }} </p>
+    </div>
+    <div class="card-body">
+        <form action="change_role" method="post">
+
+            <input type="hidden" name="id" value="{{ user.id }}">
+            <p>{{ form.role() }}</p>
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+</div>

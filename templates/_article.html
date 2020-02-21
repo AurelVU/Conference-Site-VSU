@@ -1,0 +1,12 @@
+<div class="card mb-3 ml-2 mr-2">
+    <div class="card-header">
+        <h5 class="card-title">Название: {{ article.article.name }}</h5>
+    </div>
+    <div class="card-body">
+        <p>Статус: {{ article.stat }}</p>
+        <p>Автор: {{ article.owner }}</p>
+        <p>Скачать: </p>
+        <a href={{ article.path }}>{{ article.file.name }}</a>
+        <p class="card-text"><small class="text-muted">{{ article.timestamp }}</small></p>
+    </div>
+</div>

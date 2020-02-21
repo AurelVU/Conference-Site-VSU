@@ -1,0 +1,10 @@
+<div class="card mb-3 ml-2 mr-2">
+    <div class="card-header">
+        <img src="{{ post.author.avatar(36) }}" alt="Card image cap">
+        <h5 class="card-title">От {{ post.author.username }} к {{ post.recipient.username }} написал:</h5>
+    </div>
+    <div class="card-body">
+            <p>{{ post.body }}</p>
+        <p class="card-text"><small class="text-muted">{{ post.timestamp }}</small></p>
+    </div>
+</div>

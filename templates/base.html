@@ -1,0 +1,80 @@
+{% extends '/bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}{{ title }} - Научные работы студентов ВГУ{% else %}Научные работы студентов ВГУ{% endif %}
+{% endblock %}
+
+{% block navbar %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="templates/css/tmp1">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-faded">
+      <!--<a class="navbar-brand" href="{{ url_for('index') }}">Научная работа студентов факультета компьютерных наук ВГУ</a>-->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link " href="{{ url_for('index') }}">Главная <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('news') }}">Новости <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('paper') }}">Сборник <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('download') }}">Архив <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('contact') }}">Контакты <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+
+      </div>
+    <div class="pull-right col-offset">
+    <ul class="nav navbar-nav">
+    <li class="nav-item">
+        {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Войти</a>
+            </li>
+            <li class="nav-item">
+        <a href="{{ url_for('register') }}">Регистрация</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Выйти</a>
+            </li>
+            <li class="nav-item">
+            <a href="{{ url_for('user', username=current_user.username) }}">Профиль</a>
+            </li>
+        {% endif %}
+    </li>
+    </ul>
+    </div>
+    </nav>
+
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {# содержимое приложения которое должно быть предоставлено в блоке app_content #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
