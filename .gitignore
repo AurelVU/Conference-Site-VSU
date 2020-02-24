@@ -2,3 +2,5 @@
 /venv/
 /static/files
 /static/images
+/upload
+/.idea
