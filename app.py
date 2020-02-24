@@ -1,20 +1,11 @@
 import os
 
 from flask import Flask, render_template, redirect, url_for, flash, request
-from flask.views import View
 from flask_bootstrap import Bootstrap
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, current_user, login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required
 
-from config import Config
+from init import app, db, login, migrate
 
-app = Flask(__name__)
-app.config.from_object(Config)
-login = LoginManager(app)
-login.login_view = 'login'
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 import routes, models
 from forms import *
 bootstrap = Bootstrap(app)
