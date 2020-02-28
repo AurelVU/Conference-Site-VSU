@@ -4,7 +4,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
 
-from app import db, login, app
+from init import db, login, app
 
 
 @app.before_request
