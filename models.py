@@ -21,6 +21,9 @@ class User(UserMixin, db.Model):
     role = db.Column(db.Integer, db.ForeignKey('role.id'))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    first_name = db.Column(db.String(128))
+    last_name = db.Column(db.String(128))
+    drive_folder_id = db.Column(db.String(512))
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -50,9 +53,9 @@ class Role(db.Model):
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
-    path = db.Column(db.String(204800), index=True, unique=True)
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    drive_file_id = db.Column(db.String(512))
 
     def __repr__(self):
         return '<File {}>'.format(self.name)

@@ -1,5 +1,5 @@
 import os
-
+import googledrive
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required
@@ -63,14 +63,14 @@ def article():
     form = UploadArticle()
     if form.validate_on_submit():
         current_file = form.file.data
-        if not os.path.exists(os.path.join(UPLOAD_DIR, current_user.username)) :
-            os.mkdir(os.path.join(UPLOAD_DIR, current_user.username))
-        savepath = os.path.join(os.path.join(UPLOAD_DIR, current_user.username), current_file.filename)
+        savepath = os.path.join(UPLOAD_DIR, current_file.filename)
         current_file.save(savepath)
-        file = models.File(name=current_file.filename, path=savepath, owner=current_user.id)
+        drive_id_file = googledrive.upload_file(current_user.drive_folder_id, UPLOAD_DIR, current_file.filename)
+        os.remove(savepath)
+        file = models.File(name=current_file.filename, owner=current_user.id, drive_file_id=drive_id_file)
         db.session.add(file)
         db.session.commit()
-        idfile = models.File.query.filter_by(path=savepath).first_or_404()
+        idfile = models.File.query.filter_by(drive_file_id=drive_id_file).first_or_404()
         article = models.Article(file=idfile.id, name=form.name.data, stat=1)
         db.session.add(article)
         db.session.commit()
@@ -115,7 +115,9 @@ def register():
         return redirect(url_for('index'))
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, role=1)
+        folderid = googledrive.create_new_folder('1y1k_hrwlXcEIJzfpfMv9APl2mAdYUYF6', form.username.data)
+        user = User(username=form.username.data, email=form.email.data, role=1, drive_folder_id=folderid,
+                    first_name=form.first_name.data, last_name=form.second_name.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

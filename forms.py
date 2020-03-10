@@ -7,15 +7,17 @@ from models import User
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Логин', validators=[DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
+    username = StringField('Логин', validators=[DataRequired(),  Length(min=3, max=64)])
+    password = PasswordField('Пароль', validators=[DataRequired(), Length(min=6, max=20)])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
 class RegisterForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     email = StringField('email', validators=[Email(), DataRequired()])
-    password = PasswordField('Пароль', validators=[DataRequired()])
+    first_name = StringField('Имя', validators=[Length(min=4, max=20)])
+    second_name = StringField('Фамилия', validators=[Length(min=2, max=30)])
+    password = PasswordField('Пароль', validators=[DataRequired(),  Length(min=6, max=20)])
     password_2 = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Регистрация')
 
