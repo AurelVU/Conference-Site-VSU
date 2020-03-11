@@ -87,3 +87,24 @@ class Message(db.Model):
     def __repr__(self):
         return '<Message {}>'.format(self.text)
 
+class Compilation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(500))
+    file = db.Column(db.Integer, db.ForeignKey('file.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Compilation {}>'.format(self.text)
+
+class BlockUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    block_message = db.Column(db.Boolean)
+    block_article = db.Column(db.Boolean)
+    block_file = db.Column(db.Boolean)
+
+class New(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(250))
+    text = db.Column(db.String(5000))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
