@@ -89,7 +89,7 @@ class Message(db.Model):
 
 class Compilation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(500))
+    name = db.Coumn(db.String(500))
     file = db.Column(db.Integer, db.ForeignKey('file.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
