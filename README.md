@@ -13,7 +13,5 @@
 
 Участники:
 Владимир Ушаков |	back-end / QA / Architecture
-Светлана Воронцова | front-end / design / QA
-Architecture
-Кристина Малышева | BA / PM / QA / 
-Architecture
+Светлана Воронцова | front-end / design / QA Architecture
+Кристина Малышева | BA / PM / QA / Architecture
