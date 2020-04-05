@@ -1,0 +1,38 @@
+.block{
+  max-width: 1170px;
+  margin: auto;
+}
+
+.marg{
+    margin-left: 60px;
+    margin-top: 10px;
+}
+.table th{
+padding: 2%;
+vertical-align: 0;
+}
+p{
+max-width: 660px;
+}
+ul{list-style: none}
+label{
+    position:relative;
+    display:block;
+    width:200px;
+    padding:10px;
+    cursor:pointer;
+    text-align: center;
+    background: #eeeeee;
+}
+input[type="checkbox"]{
+    opacity:0
+}
+a{display: block; text-decoration: none; padding:5px 0}
+
+.submenu{
+    position:absolute;
+    left:0;
+    top:40px
+}
+input[type="checkbox"]:checked ~ .submenu{display:block}
+.submenu{display:none}
