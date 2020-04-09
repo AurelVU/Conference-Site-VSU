@@ -4,7 +4,11 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required
 
+from flasgger import Swagger
+
 from init import app, db, login, migrate
+
+Swagger(app)
 
 import routes, models
 from forms import *
@@ -54,6 +58,42 @@ def login():
 
 @app.route('/logout')
 def logout():
+    """
+        This is the language awesomeness API
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        parameters:
+          - name: language
+            in: path
+            type: string
+            required: true
+            description: The language name
+          - name: size
+            in: query
+            type: integer
+            description: size of awesomeness
+        responses:
+          500:
+            description: Error The language is not awesome!
+          200:
+            description: A language with its awesomeness
+            schema:
+              id: awesome
+              properties:
+                language:
+                  type: string
+                  description: The language name
+                  default: Lua
+                features:
+                  type: array
+                  description: The awesomeness list
+                  items:
+                    type: string
+                  default: ["perfect", "simple", "lovely"]
+
+        """
     logout_user()
     return redirect(url_for('index'))
 
