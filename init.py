@@ -5,9 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 
 from config import Config
 
-app = Flask(__name__)
-app.config.from_object(Config)
-login = LoginManager(app)
+application = Flask(__name__)
+application.config.from_object(Config)
+login = LoginManager(application)
 login.login_view = 'login'
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+db = SQLAlchemy(application)
+migrate = Migrate(application, db)

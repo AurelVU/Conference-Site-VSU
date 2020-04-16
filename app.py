@@ -6,43 +6,43 @@ from flask_login import login_user, logout_user, login_required
 
 from flasgger import Swagger
 
-from init import app, db, login, migrate
+from init import application, db, login, migrate
 
-Swagger(app)
+Swagger(application)
 
 import routes, models
 from forms import *
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap(application)
 
 UPLOAD_DIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload')
 
-@app.route('/')
-@app.route('/index')
+@application.route('/')
+@application.route('/index')
 def index():
     return render_template("index.html",
         title = 'Главная')
 
-@app.route('/contact')
+@application.route('/contact')
 def contact():
     return render_template("contact.html",
         title = 'Контакты')
 
-@app.route('/download')
+@application.route('/download')
 def download():
     return render_template("download.html",
         title = 'Архив')
 
-@app.route('/news')
+@application.route('/news')
 def news():
     return render_template("news.html",
         title = 'Новости')
 
-@app.route('/paper')
+@application.route('/paper')
 def paper():
     return render_template("paper.html",
         title = 'Сборник')
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -56,7 +56,7 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', title='Вход', form=form)
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     """
         This is the language awesomeness API
@@ -97,7 +97,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/article', methods=['GET', 'POST'])
+@application.route('/article', methods=['GET', 'POST'])
 @login_required
 def article():
     form = UploadArticle()
@@ -131,7 +131,7 @@ def article():
 
         return render_template('articles.html', form=form, articles=articlesss)
 
-@app.route('/user/<username>')
+@application.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -149,7 +149,7 @@ def user(username):
             posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp})
     return render_template('user.html', user=user, posts=posts)
 
-@app.route('/register', methods=['GET', 'POST'])
+@application.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -166,7 +166,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Регистрация', form=form)
 
-@app.route('/edit_profile', methods=['GET', 'POST'])
+@application.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
@@ -180,7 +180,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-@app.route('/send_message', methods=['GET', 'POST'])
+@application.route('/send_message', methods=['GET', 'POST'])
 @login_required
 def send_message():
     users = User.query.all()
@@ -197,7 +197,7 @@ def send_message():
     return render_template('send_message.html', title='Отправить сообщение', form=form)
 
 
-@app.route('/change_role', methods=['GET', 'POST'])
+@application.route('/change_role', methods=['GET', 'POST'])
 @login_required
 def change_role():
     users = User.query.all()
@@ -218,4 +218,4 @@ def change_role():
     return render_template('users.html', title='Смена роли', users=users, form=form, roles=rolesss)
 
 if __name__ == '__main__':
-    app.run()
+    application.run()

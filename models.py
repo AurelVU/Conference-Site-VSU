@@ -4,10 +4,10 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
 
-from init import db, login, app
+from init import db, login, application
 
 
-@app.before_request
+@application.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
