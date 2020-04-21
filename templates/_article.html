@@ -5,8 +5,7 @@
     <div class="card-body">
         <p>Статус: {{ article.stat }}</p>
         <p>Автор: {{ article.owner }}</p>
-        <p>Скачать: </p>
-        <a href={{ article.path }}>{{ article.file.name }}</a>
+        <a href="{{ url_for('download_file', file_id=article.file.drive_file_id) }}">Скачать</a>
         <p class="card-text"><small class="text-muted">{{ article.timestamp }}</small></p>
     </div>
 </div>

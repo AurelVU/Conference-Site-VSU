@@ -1,6 +1,9 @@
 import os
+
+from transliterate import translit
+
 import googledrive
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, send_from_directory, send_file, current_app
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required
 
@@ -165,6 +168,21 @@ def register():
 
         return redirect(url_for('login'))
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@application.route('/download_file/<file_id>')
+def download_file(file_id):
+    fl = models.File.query.filter_by(drive_file_id=file_id).first_or_404()
+    file_path = googledrive.download_file(fl.name, file_id)
+
+    def generate():
+        with open(file_path) as f:
+            yield from f
+        os.remove(file_path)
+
+    r = current_app.response_class(generate(), mimetype='text/csv')
+    r.headers.set('Content-Disposition', 'attachment', filename=translit(fl.name, 'ru', reversed=True))
+    return r
 
 @application.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

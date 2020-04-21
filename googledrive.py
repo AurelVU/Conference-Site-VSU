@@ -1,4 +1,6 @@
 from __future__ import print_function
+
+import io
 import pickle
 import os.path
 import pprint
@@ -8,14 +10,21 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 # If modifying these scopes, delete the file token.pickle.
-from googleapiclient.http import MediaFileUpload
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 pp = pprint.PrettyPrinter(indent=4)
 
-def download_file(file_id):
+def download_file(filename, file_id):
     service = get_service()
-    return service.files().get_media(fileId=file_id)
+    req = service.files().get_media(fileId=file_id)
+    fh = io.FileIO(filename, 'wb')
+    downloader = MediaIoBaseDownload(fh, req)
+    done = False
+    while done is False:
+        status, done = downloader.next_chunk()
+    file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), filename)
+    return file_path
 
 def get_service():
     creds = None
