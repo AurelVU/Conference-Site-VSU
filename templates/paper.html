@@ -1,25 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
 
-			<div style="margin-left: 100px; padding: 40px">
-				<h1>Работа с авторами</h1>
+<div class="row">
+    <div class="block col-md-8">
+
+        <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body" style="margin-left:70px; margin-right: 70px;">
+				<h3 class="card-title">Работа с авторами</h3>
 				<p>Передача готовых файлов осуществляется через электронную почту кураторам по кафедре:</p>
-				<dl class="row">
-						<dt class="col-sm-3">Кафедра информационных систем – асс. Черницын Д.В</dt>
-						<dd class="col-sm-9">cdv.cs@ya.ru</dd>
 
-						<dt class="col-sm-3">Кафедра программирования и информационных технологий – асс. Нужных А.В.</dt>
-						<dd class="col-sm-9">nuzhnykh.avpp@gmail.com</dd>
+				<div id="card-curators" class="row mb-3" >
+						 <!--в словарь должны попадать только ближайшие конференции. стоит оговорить диапазон-->
+					{% set departments = { 'Кафедра информационных систем': 'асс. Черницын Д.В',
+					'Кафедра программирования и информационных технологий':'асс. Нужных А.В.',
+					'Кафедра цифровых технологий': 'асс. Попова А.В.',
+					'Кафедра технологий обработки и защиты информации': 'инж. Савченко С.В.',
+					'Кафедра информационных технологий управления': 'доц. Копытин А.В.' } %}
+					{% set emails = {'Кафедра информационных систем':'cdv.cs@ya.ru',
+					'Кафедра программирования и информационных технологий':'nuzhnykh.avpp@gmail.com',
+					'Кафедра цифровых технологий':'alexandrapopova7891@gmail.com',
+					'Кафедра технологий обработки и защиты информации':'savchenko_s@cs.vsu.ru',
+					'Кафедра информационных технологий управления':'alexkopytin@gmail.com' } %}
 
-						<dt class="col-sm-3">Кафедра цифровых технологий – асс. Попова А.В.</dt>
-						<dd class="col-sm-9">alexandrapopova7891@gmail.com</dd>
+					{% for key, value in departments.items() %}
+						<div class="card col-md-6 col-sm-3 mb-1">
+							<div class="card-body">
+									<h5 class="card-title">{{ key }}</h5>
+									<p class="card-text">{{ value }}</p>
 
-						<dt class="col-sm-3">Кафедра технологий обработки и защиты информации – инж. Савченко С.В.</dt>
-						<dd class="col-sm-9">savchenko_s@cs.vsu.ru</dd>
+								{% for e_key, email in emails.items()%}
+									{% if key == e_key %}
+									<p>{{ email }}</p>
+									{%endif%}
+								{% endfor %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
 
-						<dt class="col-sm-3">кафедра информационных технологий управления – доц. Копытин А.В.</dt>
-						<dd class="col-sm-9">alexkopytin@gmail.com</dd>
-				</dl>
 				<p>
 					Каждая статья проходит этапы рецензирования и редактирования, после которых может возникнуть необходимость доработки статьи<br>
 
@@ -27,17 +46,20 @@
 
 					Редактор оставляет за собой право на корректуру статей авторов, не меняя основную смысловую нагрузку присланного материала<br>
 				</p>
+			</div>
+		</div>
 
-
-
-				<h1>Требования к оформлению</h1>
-				<ul>
-					<li>Рекомендуемый объем статьи в студенческий сборник – 5 страниц.<br></li>
-					<li>При необходимости объем статьи можно увеличить (по согласованию с редактором, но не более 8 страниц).<br></li>
-					<li>Формат листа А5. Статья подготавливается в программе Microsoft Word  2003-2019. <br></li>
-					<li>Для оформления статей необходимо использовать файл-шаблон (Template.doc)<br></li>
-					<li>При оформлении статьи обязательны к применению стили форматирования Word, которые содержатся в файле Template.doc или в файлах примеров.<br></li>
-					<li>Текст статьи должен содержать оригинальные исследования с практической частью и быть структурирован: <br> </li>
+		<div id="requirements" class="card flex-column mb-3 " style="background-color: #f2f2f2;">
+			<div class="dropdown">
+				<h2 class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="true">Требования к оформлению</h2>
+				<div class="dropdown-menu" style="position: absolute; transform: translate3d(0px, 0px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
+					<ul>
+					<p>Рекомендуемый объем статьи в студенческий сборник – 5 страниц.<br></p>
+					<p>При необходимости объем статьи можно увеличить (по согласованию с редактором, но не более 8 страниц).<br></p>
+					<p>Формат листа А5. Статья подготавливается в программе Microsoft Word  2003-2019. <br></p>
+					<p>Для оформления статей необходимо использовать файл-шаблон (Template.doc)<br></p>
+					<p>При оформлении статьи обязательны к применению стили форматирования Word, которые содержатся в файле Template.doc или в файлах примеров.<br></p>
+					<p>Текст статьи должен содержать оригинальные исследования с практической частью и быть структурирован: <br> </p>
 					<ul>
 							<li>введение (постановка проблемы в общем виде и ее связь с  практическими задачами;
 								конкретизация части решаемой проблемы, которой  посвящена статья; не нумеруется);</li>
@@ -47,55 +69,62 @@
 							<li>библиографический список (литературные ссылки следует  нумеровать в прямых скобках, нумерация сквозная). Библиографическое  описание составляется по ГОСТ 7.1-2003 «Библиографическая запись.  Библиографическое описание.
 								Общие требования и правила составления» и  ГОСТ 7.82-2001 «Библиографическая запись. Библиографическое описание  электронных ресурсов»</li>
 					</ul>
-					Более подробно правила оформления описаны в файле Шаблон (Template.doc).
+
 				</ul>
-				</p>
-				<div class="card-deck">
-					<div class="card mb-3" style="max-width: 540px;">
-						<div class="row no-gutters">
-							<div class="col-md-4">
-							<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
-							</div>
-							<div class="col-md-8">
-							<div class="card-body">
-								<h5 class="card-title">Шаблон</h5>
-								<p class="card-text">Шаблон для оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-								<a href="../static/files/Template.doc" class="card-link">Скачать</a>
-							</div>
-							</div>
-						</div>
-					</div>
+				  <div class="dropdown-divider"></div>
+				  <ul>
+					<p>Более подробно правила оформления описаны в файле Шаблон (Template.doc).</p>
+				  </ul>
+				</div>
+			</div>
+		</div>
 
-					<div class="card mb-3" style="max-width: 540px;">
-						<div class="row no-gutters">
-							<div class="col-md-4">
-							<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
-							</div>
-							<div class="col-md-8">
-							<div class="card-body">
-								<h5 class="card-title">Пример</h5>
-								<p class="card-text">Пример оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-								<a href="../static/files/Example.doc" class="card-link">Скачать</a>
-							</div>
-							</div>
-						</div>
+		<div class="card-deck">
+			<div class="card mb-3">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+					<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
 					</div>
-
-					<div class="card mb-3" style="max-width: 540px;">
-						<div class="row no-gutters">
-							<div class="col-md-4">
-							<img src="../static/images/kisspng-zip-computer-icons-5b176e8e9005c0.4787627215282622865899.png" class="card-img img-fluid" height="auto" alt="...">
-							</div>
-							<div class="col-md-8">
-							<div class="card-body">
-								<h5 class="card-title">Архив примеров</h5>
-								<p class="card-text">Архив примеров оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-								<a href="../static/files/Examples.rar" class="card-link">Скачать</a>
-							</div>
-							</div>
-						</div>
+					<div class="card-body">
+						<h5 class="card-title">Шаблон</h5>
+						<p class="card-text">Шаблон для оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
+						<a href="../static/files/Template.doc" class="card-link">Скачать</a>
 					</div>
 				</div>
 			</div>
+
+			<div class="card mb-3">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+					<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
+					</div>
+					<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">Пример</h5>
+						<p class="card-text">Пример оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
+						<a href="../static/files/Example.doc" class="card-link">Скачать</a>
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+					<img src="../static/images/kisspng-zip-computer-icons-5b176e8e9005c0.4787627215282622865899.png" class="card-img img-fluid" height="auto" alt="...">
+					</div>
+					<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">Архив примеров</h5>
+						<p class="card-text">Архив примеров оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
+						<a href="../static/files/Examples.rar" class="card-link">Скачать</a>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
 
 {% endblock %}
