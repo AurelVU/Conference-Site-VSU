@@ -5,6 +5,7 @@ import pickle
 import os.path
 import pprint
 
+
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -18,7 +19,7 @@ pp = pprint.PrettyPrinter(indent=4)
 def download_file(filename, file_id):
     service = get_service()
     req = service.files().get_media(fileId=file_id)
-    fh = io.FileIO(filename, 'wb')
+    fh = io.FileIO(os.path.join(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload'), filename), 'wb')
     downloader = MediaIoBaseDownload(fh, req)
     done = False
     while done is False:

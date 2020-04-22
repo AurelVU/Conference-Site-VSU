@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
 
 from transliterate import translit
 
-import googledrive
-from flask import Flask, render_template, redirect, url_for, flash, request, send_from_directory, send_file, current_app
+
+from flask import Flask, Response, render_template, redirect, url_for, flash, request, send_from_directory, send_file, current_app
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required
 
@@ -19,31 +20,40 @@ bootstrap = Bootstrap(application)
 
 UPLOAD_DIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload')
 
+import shutil
+
+
+def remove_folder_contents(path):
+    shutil.rmtree(path)
+    os.makedirs(path)
+
+
+import googledrive
 @application.route('/')
 @application.route('/index')
 def index():
     return render_template("index.html",
-        title = 'Главная')
+        title='Главная', index='active')
 
 @application.route('/contact')
 def contact():
     return render_template("contact.html",
-        title = 'Контакты')
+        title = 'Контакты', contact='active')
 
 @application.route('/download')
 def download():
     return render_template("download.html",
-        title = 'Архив')
+        title = 'Архив', download='active')
 
 @application.route('/news')
 def news():
     return render_template("news.html",
-        title = 'Новости')
+        title = 'Новости', news='active')
 
 @application.route('/paper')
 def paper():
     return render_template("paper.html",
-        title = 'Сборник')
+        title = 'Сборник', paper='active')
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
@@ -172,6 +182,7 @@ def register():
 
 @application.route('/download_file/<file_id>')
 def download_file(file_id):
+    remove_folder_contents(UPLOAD_DIR)
     fl = models.File.query.filter_by(drive_file_id=file_id).first_or_404()
     file_path = googledrive.download_file(fl.name, file_id)
 
@@ -180,9 +191,11 @@ def download_file(file_id):
             yield from f
         os.remove(file_path)
 
-    r = current_app.response_class(generate(), mimetype='text/csv')
-    r.headers.set('Content-Disposition', 'attachment', filename=translit(fl.name, 'ru', reversed=True))
-    return r
+    #r = current_app.response_class(generate(), mimetype='text/csv')
+    #r.headers.set('Content-Disposition', 'attachment', filename=translit(fl.name, 'ru', reversed=True))
+    #return r
+    #return Response(generate(), mimetype="text/csv", headers={"Content disposition":"attachment; filename=" + translit(fl.name, 'ru', reversed=True)})
+    return send_from_directory(directory=UPLOAD_DIR, filename=fl.name)
 
 @application.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -224,10 +237,10 @@ def change_role():
     ChangeUser.setRoles(current_role)
     form = ChangeUser()
     rolesss = {}
-    for r in roles: #1 - admin, 2 - user, 3 - changer
+    for r in roles: #2 - admin, 1 - user, 3 - changer
         rolesss[r.id] = r.name
     if form.submit.data:
-        if current_user.role == 1:
+        if current_user.role == 2:
             id_user = int(form.id.data)
             role = int(form.role.data[0])
             User.query.filter_by(id=id_user).update({'role': role})

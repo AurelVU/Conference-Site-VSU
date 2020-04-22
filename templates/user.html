@@ -11,7 +11,7 @@
                 <p><a href="{{ url_for('edit_profile') }}">Изменить ваш профиль</a></p>
                 <p><a href="{{ url_for('send_message') }}">Отправить сообщение</a></p>
                 <p><a href="{{ url_for('article') }}">Ваши статьи</a></p>
-                {% if user == current_user %}
+                {% if current_user.role == 2 %}
                 <p><a href="{{ url_for('change_role') }}">Изменить роли пользователей</a></p>
                 {% endif %}
             {% endif %}
