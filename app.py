@@ -3,6 +3,7 @@ import os
 
 from transliterate import translit
 
+from config import UPLOAD_DIR
 
 from flask import Flask, Response, render_template, redirect, url_for, flash, request, send_from_directory, send_file, current_app
 from flask_bootstrap import Bootstrap
@@ -17,8 +18,6 @@ Swagger(application)
 import routes, models
 from forms import *
 bootstrap = Bootstrap(application)
-
-UPLOAD_DIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload')
 
 import shutil
 
@@ -116,14 +115,10 @@ def article():
     form = UploadArticle()
     if form.validate_on_submit():
         current_file = form.file.data
-        savepath = os.path.join(UPLOAD_DIR, current_file.filename)
-        current_file.save(savepath)
-        drive_id_file = googledrive.upload_file(current_user.drive_folder_id, UPLOAD_DIR, current_file.filename)
-        os.remove(savepath)
-        file = models.File(name=current_file.filename, owner=current_user.id, drive_file_id=drive_id_file)
+        file = models.File.upload(current_file)
         db.session.add(file)
         db.session.commit()
-        idfile = models.File.query.filter_by(drive_file_id=drive_id_file).first_or_404()
+        idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
         article = models.Article(file=idfile.id, name=form.name.data, stat=1)
         db.session.add(article)
         db.session.commit()
@@ -184,17 +179,13 @@ def register():
 def download_file(file_id):
     remove_folder_contents(UPLOAD_DIR)
     fl = models.File.query.filter_by(drive_file_id=file_id).first_or_404()
-    file_path = googledrive.download_file(fl.name, file_id)
+    file_path = fl.download()
 
     def generate():
         with open(file_path) as f:
             yield from f
         os.remove(file_path)
 
-    #r = current_app.response_class(generate(), mimetype='text/csv')
-    #r.headers.set('Content-Disposition', 'attachment', filename=translit(fl.name, 'ru', reversed=True))
-    #return r
-    #return Response(generate(), mimetype="text/csv", headers={"Content disposition":"attachment; filename=" + translit(fl.name, 'ru', reversed=True)})
     return send_from_directory(directory=UPLOAD_DIR, filename=fl.name)
 
 @application.route('/edit_profile', methods=['GET', 'POST'])

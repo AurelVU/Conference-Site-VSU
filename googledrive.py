@@ -4,7 +4,7 @@ import io
 import pickle
 import os.path
 import pprint
-
+from config import UPLOAD_DIR
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -93,5 +93,4 @@ def upload_file(parent_folder_id, path, filename):
 
 def delete_file(fileid):
     service = get_service()
-
     service.files().delete(fileId=fileid).execute()

@@ -1,6 +1,8 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+UPLOAD_DIR =  os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload')
+
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     CSRF_ENABLED = True
