@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 import os
 
-from transliterate import translit
-
 from config import UPLOAD_DIR
 
-from flask import Flask, Response, render_template, redirect, url_for, flash, request, send_from_directory, send_file, current_app
+from flask import render_template, redirect, url_for, flash, request, send_from_directory
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required
 
 from flasgger import Swagger
 
-from init import application, db, login, migrate
+from init import application, db
 
 Swagger(application)
 
-import routes, models
+import models
 from forms import *
 bootstrap = Bootstrap(application)
 
@@ -32,27 +30,27 @@ import googledrive
 @application.route('/index')
 def index():
     return render_template("index.html",
-        title='Главная', index='active')
+                           title='Главная', index='active')
 
 @application.route('/contact')
 def contact():
     return render_template("contact.html",
-        title = 'Контакты', contact='active')
+                           title = 'Контакты', contact='active')
 
 @application.route('/download')
 def download():
     return render_template("download.html",
-        title = 'Архив', download='active')
+                           title = 'Архив', download='active')
 
 @application.route('/news')
 def news():
     return render_template("news.html",
-        title = 'Новости', news='active')
+                           title = 'Новости', news='active')
 
 @application.route('/paper')
 def paper():
     return render_template("paper.html",
-        title = 'Сборник', paper='active')
+                           title = 'Сборник', paper='active')
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
@@ -144,7 +142,8 @@ def article():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
-    messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(models.Message.timestamp.desc()).all())
+    messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
+        models.Message.timestamp.desc()).all())
     posts = []
     for m in messages:
         if user.id == m.id_to:
