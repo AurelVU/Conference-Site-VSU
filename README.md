@@ -1,5 +1,7 @@
 # Веб-сервис для подачи научных статей
 
+Ссылка на развернутое приложение: https://www.student-conference.site/
+
 Ссылка на Trello: https://trello.com/b/QfSvDBVm
 
 Ссылка на Miro: https://miro.com/app/board/o9J_kvYaYp8=/
