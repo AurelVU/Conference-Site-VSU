@@ -41,12 +41,17 @@
             </tr>
             <div class="btn-group" role="group" style = "margin-left:%">
 
-                <!--в словарь должны попадать только ближайшие конференции. стоит оговорить диапазон-->
-                {% set employee = { 'Дата': 'Новость', '12.07.2020': 'Ближайшая конференция; какой-то текст с информацией о ней' } %}
-                {% for key, value in employee.items() %}
+                <!--в словарь должны попадать только ближайшие конференции. стоит оговорить диапазон
+                {% set employee = { 'data': '12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней' } %}
+                -->
+                {% set news = [{'data':'12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней'},{'data':'12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней'}, {'data':'12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней'}] %}
+                {% for new in news %}
                 <tr>
-                    <th scope="row" style="text-align:center">{{ key }} </th>
-                    <th scope="row" style="text-align:center">{{ value }}</th>
+                    <th scope="row" style="text-align:center">{{new.data}}</th>
+                    <th scope="row" style="text-align:center">
+                        <h6>{{new.title}}</h6>
+                        <p>{{new.text}}</p>
+                    </th>
                 </tr>
                 {% endfor %}
 

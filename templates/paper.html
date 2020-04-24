@@ -10,33 +10,25 @@
 				<h3 class="card-title">Работа с авторами</h3>
 				<p>Передача готовых файлов осуществляется через электронную почту кураторам по кафедре:</p>
 
-				<div id="card-curators" class="row mb-3" >
+				<div id="card-curators" class="row mb-3 mr-1 ml-1" >
 						 <!--в словарь должны попадать только ближайшие конференции. стоит оговорить диапазон-->
-					{% set departments = { 'Кафедра информационных систем': 'асс. Черницын Д.В',
-					'Кафедра программирования и информационных технологий':'асс. Нужных А.В.',
-					'Кафедра цифровых технологий': 'асс. Попова А.В.',
-					'Кафедра технологий обработки и защиты информации': 'инж. Савченко С.В.',
-					'Кафедра информационных технологий управления': 'доц. Копытин А.В.' } %}
-					{% set emails = {'Кафедра информационных систем':'cdv.cs@ya.ru',
-					'Кафедра программирования и информационных технологий':'nuzhnykh.avpp@gmail.com',
-					'Кафедра цифровых технологий':'alexandrapopova7891@gmail.com',
-					'Кафедра технологий обработки и защиты информации':'savchenko_s@cs.vsu.ru',
-					'Кафедра информационных технологий управления':'alexkopytin@gmail.com' } %}
 
-					{% for key, value in departments.items() %}
-						<div class="card col-md-6 col-sm-3 mb-1">
+					{% set news = [
+						{'course':'Кафедра информационных систем', 'teacher': 'асс. Черницын Д.В', 'email': 'cdv.cs@ya.ru'},
+						{'course':'Кафедра программирования и информационных технологий', 'teacher': 'асс. Нужных А.В.', 'email': 'nuzhnykh.avpp@gmail.com'},
+						{'course':'Кафедра цифровых технологий', 'teacher': 'асс. Попова А.В.', 'email': 'alexandrapopova7891@gmail.com'},
+						{'course':'Кафедра технологий обработки и защиты информации', 'teacher': 'инж. Савченко С.В.', 'email': 'savchenko_s@cs.vsu.ru'},
+						{'course':'Кафедра информационных технологий управления', 'teacher': 'доц. Копытин А.В.', 'email': 'alexkopytin@gmail.com'}] %}
+					{% for new in news %}
+						<div class="card col-md-6 col-sm-3 mb-1" style="background-color: #f2f2f2;">
 							<div class="card-body">
-									<h5 class="card-title">{{ key }}</h5>
-									<p class="card-text">{{ value }}</p>
-
-								{% for e_key, email in emails.items()%}
-									{% if key == e_key %}
-									<p>{{ email }}</p>
-									{%endif%}
-								{% endfor %}
+								<h5 class="card-title">{{ new.course }}</h5>
+								<p class="card-text">{{ new.teacher }}</p>
+								<p>{{ new.email }}</p>
 							</div>
 						</div>
 					{% endfor %}
+
 				</div>
 
 				<p>
@@ -79,50 +71,29 @@
 			</div>
 		</div>
 
-		<div class="card-deck">
-			<div class="card mb-3">
-				<div class="row no-gutters">
-					<div class="col-md-4">
-					<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
-					</div>
-					<div class="card-body">
-						<h5 class="card-title">Шаблон</h5>
-						<p class="card-text">Шаблон для оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-						<a href="../static/files/Template.doc" class="card-link">Скачать</a>
-					</div>
-				</div>
-			</div>
+		<div id="patterns" class="card-deck">
 
-			<div class="card mb-3">
-				<div class="row no-gutters">
-					<div class="col-md-4">
-					<img src="../static/images/doc_document.png" class="card-img img-fluid" alt="...">
-					</div>
-					<div class="col-md-8">
-					<div class="card-body">
-						<h5 class="card-title">Пример</h5>
-						<p class="card-text">Пример оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-						<a href="../static/files/Example.doc" class="card-link">Скачать</a>
-					</div>
-					</div>
-				</div>
-			</div>
+			{% set news = [
+			{'image':'../static/images/document.png', 'href':'../static/files/Template.doc', 'title': 'Шаблон', 'text': 'Шаблон для оформления статей в студенческий сборник научных работ факультета компьютерных наук'},
+			{'image':'../static/images/document.png', 'href':'../static/files/Example.doc', 'title': 'Пример', 'text': 'Пример оформления статей в студенческий сборник научных работ факультета компьютерных наук'},
+			{'image':'../static/images/rar.png', 'href':'../static/files/Examples.rar', 'title': 'Архив примеров', 'text': 'Архив примеров оформления статей в студенческий сборник научных работ факультета компьютерных наук'}
+						] %}
+					{% for new in news %}
+						<div class="card mb-3">
+							<div class="row no-gutters">
+								<div class="col-md-4">
+								<img src="{{new.image}}" class="card-img img-fluid" alt="...">
+								</div>
+								<div class="card-body">
+									<h5 class="card-title">{{new.title}}</h5>
+									<p class="card-text">{{new.text}}</p>
+									<a href="{{new.href}}" class="card-link">Скачать</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
 
-			<div class="card mb-3">
-				<div class="row no-gutters">
-					<div class="col-md-4">
-					<img src="../static/images/kisspng-zip-computer-icons-5b176e8e9005c0.4787627215282622865899.png" class="card-img img-fluid" height="auto" alt="...">
-					</div>
-					<div class="col-md-8">
-					<div class="card-body">
-						<h5 class="card-title">Архив примеров</h5>
-						<p class="card-text">Архив примеров оформления статей в студенческий сборник научных работ факультета компьютерных наук</p>
-						<a href="../static/files/Examples.rar" class="card-link">Скачать</a>
-					</div>
-					</div>
-				</div>
 			</div>
-		</div>
 
 	</div>
 </div>
