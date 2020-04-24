@@ -1,0 +1,10 @@
+# Project exclude paths
+/Conference-Site-VSU/venv/
+/Conference-Site-VSU/static/files
+/Conference-Site-VSU/static/images
+/Conference-Site-VSU/upload
+/.idea
+/Conference-Site-VSU/credentials.json
+/Conference-Site-VSU/My Project-20085ab94472.json
+/Conference-Site-VSU/token.pickle
+/Conference-Site-VSU/generate_er_diagram.py
