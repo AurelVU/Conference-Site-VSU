@@ -107,6 +107,24 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
+@application.route('/add_news', methods=['GET', 'POST'])
+@login_required
+def add_news():
+    form = AddNews()
+    if current_user.role == 2:
+        if form.validate_on_submit():
+            title = form.title.data
+            text = form.text.data
+            new = models.New(text=text, title=title)
+            db.session.add(new)
+            db.session.commit()
+            return redirect(url_for('news'))
+        else:
+            return render_template('articles.html', form=form)
+    return 'Ошибка доступа'
+
+
 @application.route('/article', methods=['GET', 'POST'])
 @login_required
 def article():
@@ -120,7 +138,7 @@ def article():
         article = models.Article(file=idfile.id, name=form.name.data, stat=1)
         db.session.add(article)
         db.session.commit()
-        #file = models.File(name=, path=, owner=current_user.id)
+
         return redirect(url_for('article'))
     else:
         articles = models.Article.query.join(models.File, (models.File.id == models.Article.file)).all()

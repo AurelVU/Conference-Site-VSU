@@ -59,3 +59,9 @@ class ChangeUser(FlaskForm):
         ChangeUser.role = SelectMultipleField('Роль', validators=[DataRequired()], choices=roles)
         ChangeUser.submit = SubmitField('Отправить')
         ChangeUser.id = HiddenField('id')
+
+
+class AddNews(FlaskForm):
+    title = StringField('Заголовок')
+    text = StringField('Текст новости')
+    submit = SubmitField('Отправить')
