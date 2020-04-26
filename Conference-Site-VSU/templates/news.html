@@ -1,29 +1,52 @@
 {% extends "base.html" %}
+
 {% block content %}
 <script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
 <div class="row">
-    <div class="block col-md-8">
-        <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
-            <div class="card-header bg-dark"></div>
-            <div class="card-body" style="margin-left:70px; margin-right: 70px">
-				 <h3 class="card-title">Новости</h3>
-					<div id="card-news" class="card-column">
+	<div class="block col-md-8">
+		<div id="adm_information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
+			<div class="card-header bg-dark"></div>
+			<div class="card-body" style="margin-left:70px; margin-right: 70px">
+{% if current_user.role == 2 %}
+				<h3 class="card-title"></h3>
 
-					{% set news = [
-						{'time':'3', 'title': 'Новость 1;', 'text': 'какой-то текст с информацией о ней'},
-						{'time':'4', 'title': 'Новость 2', 'text': 'какой-то текст с информацией о ней'},
-						{'time':'12', 'title': 'Новость 3', 'text': 'какой-то текст с информацией о ней'}] %}
-						{% for new in news %}
-						<div class="card mb-3 " style="max-width: 660px;">
-							<div class="card-body">
-								<h5 class="card-title">{{new.title}}</h5>
-								<p class="card-text">{{new.text}}</p>
-								<p class="card-text"><small class="text-muted">Last updated {{new.time}} mins ago</small></p>
-							</div>
+					<div id="back_and_search" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
+
+						<div class="card col-md-6 col-sm-8" style="border: none;">
+							<button type="button" class="btn btn-primary" style="width: 90px; hight: 30px;">Назад</button>
 						</div>
-					{% endfor %}
+
+						<div class="card col-md- col-sm-8 bg-secondary "
+							 style="max-width:230px; max-hight:50px; border: none; margin-top:10px; margin-left:15%">
+							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
+							  <input type="hidden"  style="all: unset;" name="searchid">
+							  <input type="search" style="all: unset;" name="text" required placeholder="Поиск по сайту">
+							  <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback">
+							</form>
+						</div>
 
 					</div>
+
+					<div id="filters" class="row mb-5 " style="margin-left:1px; margin-right:1px;">
+
+						<div class="card col-md-6 col-sm-8" style="border:none">
+							<h4 style="margin-top:auto;">Фильтры</h4>
+						</div>
+						<div class="card col-md-3 col-sm-4" style="border:none">
+							<button type="button" class="btn btn-primary" style=" margin:auto">Название</button>
+						</div>
+						<div class="card col-md-3 col-sm-4" style="border:none">
+							<button type="button" class="btn btn-primary" style=" margin:auto">Дата</button>
+						</div>
+
+					</div>
+
+					{% include '_news_block.html' %}
+
+				{% else %}
+				<h3 class="card-title">Новости</h3>
+					{% include '_news_block.html' %}
+				{% endif %}
 			</div>
 		</div>
 	</div>

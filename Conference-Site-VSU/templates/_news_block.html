@@ -1,0 +1,31 @@
+<div id="card-news" class="card-column">
+
+    {% set news = [
+        {'time':'3', 'title': 'Новость 1;', 'text': 'какой-то текст с информацией о ней'},
+        {'time':'4', 'title': 'Новость 2', 'text': 'какой-то текст с информацией о ней'},
+        {'time':'12', 'title': 'Новость 3', 'text': 'какой-то текст с информацией о ней'}] %}
+        {% for new in news %}
+        <div class="card mb-3 " style="max-width: 660px;">
+            <div class="card-body">
+                {% if current_user.role == 2 %}
+                <div class="row">
+                    <div class="card col-md-9 col-sm-2 " style="padding:10px; border:none;">
+                        <h5 class="card-title">{{new.title}}</h5>
+                        <p class="card-text">{{new.text}}</p>
+                        <p class="card-text"><small class="text-muted">Last updated {{new.time}} mins ago</small></p>
+                    </div>
+                    <div class="card col-md-3 col-sm-1" style="border:none;">
+                        <button type="button" class="btn btn-primary mb-1 " style=" hight: 30px;">Удалить</button>
+                        <button type="button" class="btn btn-primary mb-1" style=" hight: 30px;">Изменить</button>
+                    </div>
+                </div>
+                {% else %}
+                <h5 class="card-title">{{new.title}}</h5>
+                <p class="card-text">{{new.text}}</p>
+                <p class="card-text"><small class="text-muted">Last updated {{new.time}} mins ago</small></p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
