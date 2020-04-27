@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileRequired, FileAllowed
 from wtforms import * # BooleanField, StringField, PasswordField, SubmitField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, ValidationError, EqualTo, Length
 
@@ -42,7 +43,7 @@ class EditPasswordForm(FlaskForm):
 
 class UploadArticle(FlaskForm):
     name = StringField('Название статьи', validators=[DataRequired()])
-    file = FileField('Файл вашей работы', validators=[DataRequired()])
+    file = FileField('Файл вашей работы', validators=[DataRequired(), FileRequired(), FileAllowed(['pdf', 'docx', 'rtx'], 'Только документы формата pdf, docx, rtx')])
     submit = SubmitField('Отправить')
 
 class SendMessage(FlaskForm):

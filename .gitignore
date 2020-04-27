@@ -1,7 +1,6 @@
 # Project exclude paths
 /Conference-Site-VSU/venv/
 /Conference-Site-VSU/static/files
-/Conference-Site-VSU/static/images
 /Conference-Site-VSU/upload
 /.idea
 /Conference-Site-VSU/credentials.json

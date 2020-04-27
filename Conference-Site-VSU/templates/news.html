@@ -4,10 +4,11 @@
 <script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
 <div class="row">
 	<div class="block col-md-8">
+
 		<div id="adm_information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
 			<div class="card-header bg-dark"></div>
 			<div class="card-body" style="margin-left:70px; margin-right: 70px">
-{% if current_user.role == 2 %}
+            {% if current_user.role == 2 %}
 				<h3 class="card-title"></h3>
 
 					<div id="back_and_search" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
@@ -21,7 +22,8 @@
 							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
 							  <input type="hidden"  style="all: unset;" name="searchid">
 							  <input type="search" style="all: unset;" name="text" required placeholder="Поиск по сайту">
-							  <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback">
+
+							 <!-- <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback"> -->
 							</form>
 						</div>
 
@@ -37,6 +39,10 @@
 						</div>
 						<div class="card col-md-3 col-sm-4" style="border:none">
 							<button type="button" class="btn btn-primary" style=" margin:auto">Дата</button>
+						</div>
+
+                        <div class="card col-md-3 col-sm-4" style="border:none">
+							<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('add_news') }}'" style=" margin:auto">Добавить новость</button>
 						</div>
 
 					</div>

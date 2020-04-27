@@ -1,10 +1,7 @@
 <div id="card-news" class="card-column">
 
-    {% set news = [
-        {'time':'3', 'title': 'Новость 1;', 'text': 'какой-то текст с информацией о ней'},
-        {'time':'4', 'title': 'Новость 2', 'text': 'какой-то текст с информацией о ней'},
-        {'time':'12', 'title': 'Новость 3', 'text': 'какой-то текст с информацией о ней'}] %}
-        {% for new in news %}
+
+        {% for new in newss %}
         <div class="card mb-3 " style="max-width: 660px;">
             <div class="card-body">
                 {% if current_user.role == 2 %}

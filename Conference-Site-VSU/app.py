@@ -29,7 +29,13 @@ import googledrive
 @application.route('/')
 @application.route('/index')
 def index():
-    return render_template("index.html",
+    # {% set employee = { 'data': '12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней' } %}
+#    user_to = User.query.filter_by(id=m.id_to).first_or_404()
+    _news = models.New.query.limit(3).all()
+    news = []
+    for n in _news:
+        news.append({'data': n.timestamp, 'title': n.title, 'text': n.text })
+    return render_template("index.html", news=news,
                            title='Главная', index='active')
 
 @application.route('/contact')
@@ -44,7 +50,11 @@ def download():
 
 @application.route('/news')
 def news():
-    return render_template("news.html",
+    _news = models.New.query.all()
+    news = []
+    for n in _news:
+        news.append({'data': n.timestamp, 'title': n.title, 'text': n.text })
+    return render_template("news.html", newss=news,
                            title = 'Новости', news='active')
 
 @application.route('/paper')
