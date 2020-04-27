@@ -11,27 +11,30 @@
             {% if current_user.role == 2 %}
 				<h3 class="card-title"></h3>
 
-					<div id="back_and_search" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
-
-						<div class="card col-md-6 col-sm-8" style="border: none;">
-							<button type="button" class="btn btn-primary" style="width: 90px; hight: 30px;">Назад</button>
+					<div id="back_search_add_btn" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
+						<div class="card col-md-4 col-sm-6" style="border: none;">
+							<button type="button" class="btn btn-outline-secondary" style="width: 100px; hight: 30px;">Назад</button>
 						</div>
 
-						<div class="card col-md- col-sm-8 bg-secondary "
-							 style="max-width:230px; max-hight:50px; border: none; margin-top:10px; margin-left:15%">
+						<div class="card col-md-4 col-sm-8 bg-secondary "
+							 style=" border: none; margin-top:10px; ">
 							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
 							  <input type="hidden"  style="all: unset;" name="searchid">
 							  <input type="search" style="all: unset;" name="text" required placeholder="Поиск по сайту">
 
-							 <!-- <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback"> -->
+							  <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback">
 							</form>
+						</div>
+
+						 <div class="card col-md-4 col-sm-4" style="border:none; ">
+							<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('add_news') }}'" style=" margin:left">Добавить новость</button>
 						</div>
 
 					</div>
 
-					<div id="filters" class="row mb-5 " style="margin-left:1px; margin-right:1px;">
+					<!--<div id="filters" class="row mb-5 " style="margin-left:1px; margin-right:1px;">
 
-						<div class="card col-md-6 col-sm-8" style="border:none">
+						<div class="card col-md-6 col-sm-8" style="border:inline">
 							<h4 style="margin-top:auto;">Фильтры</h4>
 						</div>
 						<div class="card col-md-3 col-sm-4" style="border:none">
@@ -41,11 +44,19 @@
 							<button type="button" class="btn btn-primary" style=" margin:auto">Дата</button>
 						</div>
 
-                        <div class="card col-md-3 col-sm-4" style="border:none">
-							<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('add_news') }}'" style=" margin:auto">Добавить новость</button>
+					</div>-->
+<!--
+					<div id="add_btn" class="row mb-3 " style="margin-left:1px; margin-right:1px;">
+						<div class="card col-md-9 col-sm-8" style="border: none">
 						</div>
 
-					</div>
+                        <div class="card col-md-3 col-sm-6" style="border: none">
+							<button type="button" class="btn btn-primary" onclick="window.location.href='{{ url_for('add_news') }}'" style=" margin:left">Добавить новость</button>
+						</div>
+
+					</div>-->
+
+					<div class="card bg-dark mb-4" style="hight: 1px"></div>
 
 					{% include '_news_block.html' %}
 
