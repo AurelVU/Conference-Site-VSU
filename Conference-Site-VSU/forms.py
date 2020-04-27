@@ -63,6 +63,6 @@ class ChangeUser(FlaskForm):
 
 
 class AddNews(FlaskForm):
-    title = StringField('Заголовок')
-    text = StringField('Текст новости')
+    title = StringField('Заголовок', validators=[Length(min=0, max=250)])
+    text = TextAreaField('Текст новости', validators=[Length(min=0, max=5000)])
     submit = SubmitField('Отправить')
