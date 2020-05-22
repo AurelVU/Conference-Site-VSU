@@ -242,9 +242,6 @@ def send_message():
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
         models.Message.timestamp.desc()).all())
-
-
-
     posts = []
     msgs = []
 
@@ -261,7 +258,7 @@ def send_message():
             received = user_to
             posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
 
-    if (request.args['id_to']):
+    if request.args.get('id_to'):
         id_to = int(request.args['id_to'])
         messages2 = models.Message.query.filter_by(id_to=user.id).filter_by(id_from=id_to).join(User, (
                     User.id == models.Message.id_from)).all()
