@@ -1,7 +1,55 @@
 {% extends "base.html" %}
 {% import '/bootstrap/wtf.html' as wtf %}
 
+
 {% block content %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket;
+
+        $(document).ready(function(){
+            socket = io.connect('http://' + document.domain + ':' + location.port + '/send_message');
+            socket.on('connect', function() {
+                socket.emit('joined', {});
+            });
+            socket.on('status', function(data) {
+                $('#chat')[0].innerHTML += '<' + data.msg + '>\n';
+                // $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
+                //$('#chat')[0].scrollTop($('#chat')[0].scrollHeight);
+                $('#chat')[0].scrollTop = $('#chat')[0].scrollHeight;
+            });
+            socket.on('message', function(data) {
+                if (  {{ current_user.id }} != Number.parseInt(data.recipient_id))
+                {
+                   $('#chat')[0].innerHTML += ' <div class="incoming_msg">  <div class="img"> <img src=" {{ received.avatar(128) }}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div> <div class="received_msg">  <div class="received_withd_msg">  <p> ' + data.msg + ' </p>  <span class="time_date"> ' + data.timestamp + ' </span></div> </div> </div>';
+                } else
+                {
+                    $('#chat')[0].innerHTML += '<div class="outgoing_msg">      <div class="sent_msg">       <p>' + data.msg + '</p>      <span class="time_date"> ' + data.timestamp  + '  </span></div>   </div>'
+                }
+                $('#chat')[0].scrollTop = $('#chat')[0].scrollHeight;
+                //$('#chat')[0].scrollTop($('#chat')[0].scrollHeight);
+            });
+            $('#text').keypress(function(e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) {
+                    text = $('#text')[0].val();
+                    $('#text')[0].val('');
+                    socket.emit('text', {msg: text, id_from: {{ current_user.id }}, id_to: {{ id_to }} });
+                }
+            });
+        });
+        function send(e) {
+            text = $('#text').val();
+            $('#text').val('');
+            socket.emit('text', {msg: text, id_from: {{ current_user.id }}, id_to: {{ id_to }} });
+        }
+        function leave_room() {
+            socket.emit('left', {}, function() {
+                socket.disconnect();
+            });
+        }
+    </script>
 <script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
 <div class="row">
     <div class="block col-md-8">
@@ -11,6 +59,7 @@
             <div class="card-body" style="margin-left:2rem; margin-right: 2rem">
                 <h3>Диалоги</h3>
                 <div class="row mb-3 mr-1 ml-1" style="min-width: 20rem;">
+
                     <!-- {{ wtf.quick_form(form) }}-->
                     <style>
                         .scroll_post {
@@ -28,11 +77,8 @@
                             {% endfor %}
                         </div>
                     <!--/div-->
-
-                    <div class="scroll_post" style="padding:1rem; margin-left: 3rem; border-radius: 1rem; ">
-
-
-                            <style>
+                    <div class="col" style="padding:1rem; margin-left: 3rem; border-radius: 1rem; ">
+                    <style>
                                 .mesgs {
                                   float: left;
                                   padding: 30px 15px 0 25px;
@@ -100,35 +146,22 @@
                                   width: 33px;
                                 }
                             </style>
-
+                    <div class="scroll_post" id="chat" >
                                 {% for msg in msgs %}
-                                {% if (current_user.id == msg.recipient.id) %}
-                                <div class="incoming_msg">
-                                  <div class="img"> <img src=" {{ received.avatar(128) }}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div>
-                                  <div class="received_msg">
-                                    <div class="received_withd_msg">
-                                      <p>{{ msg.body }}</p>
-                                      <span class="time_date"> {{ msg.timestamp }}</span></div>
-                                  </div>
-                                </div>
-                               {% else %}
-                                <div class="outgoing_msg">
-                                  <div class="sent_msg">
-                                    <p>{{ msg.body }}</p>
-                                    <span class="time_date"> {{ msg.timestamp }}</span></div>
-                                </div>
-                                {% endif %}
+                                    {% include '_msg.html' %}
                                 {% endfor %}
-
-                        <div class="type_msg">
-                            <form action="/send/" target="_blank" class="input_msg_write form-search">
-                                <textarea type="text" name="message" required placeholder="Type a message"></textarea>
-                              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-                            </form>
-                        </div>
-
                     </div>
-
+                    <div class="type_msg mt-3">
+                            <!-- <form action="/send/" target="_blank" class="input_msg_write form-search">
+                                <textarea id="text" type="text" name="message" required placeholder="Type a message"></textarea>
+                              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                            </form> -->
+                            <div class="input_msg_write form-search">
+                                <textarea id="text" type="text" name="message" required placeholder="Type a message"></textarea>
+                                <button class="msg_send_btn" type="button" onclick="send();"><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></button>
+                            </div>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>

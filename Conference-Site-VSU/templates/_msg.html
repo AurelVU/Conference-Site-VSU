@@ -1,0 +1,16 @@
+{% if (current_user.id == msg.recipient.id) %}
+    <div class="incoming_msg">
+      <div class="img"> <img src=" {{ received.avatar(128) }}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div>
+      <div class="received_msg">
+        <div class="received_withd_msg">
+          <p>{{ msg.body }}</p>
+          <span class="time_date"> {{ msg.timestamp }}</span></div>
+      </div>
+    </div>
+    {% else %}
+    <div class="outgoing_msg">
+      <div class="sent_msg">
+        <p>{{ msg.body }}</p>
+        <span class="time_date"> {{ msg.timestamp }}</span></div>
+    </div>
+{% endif %}

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
+from operator import attrgetter
 
 from config import UPLOAD_DIR
-from flask_socketio import SocketIO
 
-socketio = SocketIO()
-
-from flask import render_template, redirect, url_for, flash, request, send_from_directory
+import events
+from flask import render_template, redirect, url_for, flash, request, send_from_directory, session
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required, current_user
 
 from flasgger import Swagger
 
-from init import application, db
+from init import application, db, socketio
 
 Swagger(application)
 
@@ -177,6 +176,7 @@ def user(username):
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
         models.Message.timestamp.desc()).all())
     posts = []
+    messages = sorted(messages, key=attrgetter('timestamp'))
     for m in messages:
         if user.id == m.id_to:
             user_to = user
@@ -186,6 +186,7 @@ def user(username):
             user_to = User.query.filter_by(id=m.id_to).first_or_404()
             user_from = user
             posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+
     return render_template('user.html', user=user, posts=posts)
 
 @application.route('/register', methods=['GET', 'POST'])
@@ -236,8 +237,6 @@ def edit_profile():
 @application.route('/send_message', methods=['GET', 'POST'])
 @login_required
 def send_message():
-
-
     user = User.query.filter_by(username=current_user.username).first_or_404()
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
@@ -246,6 +245,7 @@ def send_message():
     msgs = []
     users = set()
     received = None
+    messages = sorted(messages, key=attrgetter('timestamp'))
     for m in messages:
         if user.id == m.id_to:
             user_to = user
@@ -261,14 +261,17 @@ def send_message():
             if not (user_to.id in users):
                 posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
                 users.add(user_to.id)
+    id_to = ''
 
     if request.args.get('id_to'):
         id_to = int(request.args['id_to'])
+        session['room'] = str(min(current_user.id, id_to)) + '_' + str(max(current_user.id, id_to))
         messages2 = models.Message.query.filter_by(id_to=user.id).filter_by(id_from=id_to).join(User, (
                     User.id == models.Message.id_from)).all()
         messages2 += (models.Message.query.filter_by(id_from=user.id).filter_by(id_to=id_to).join(User, (
                     User.id == models.Message.id_to)).order_by(
             models.Message.timestamp.desc()).all())
+        messages2 = sorted(messages2, key=attrgetter('timestamp'))
         for m in messages2:
             if user.id == m.id_to:
                 user_to = user
@@ -285,14 +288,7 @@ def send_message():
     users_logins = [(i.username, i.username) for i in users]
     SendMessage.setLogins(users_logins)
     form = SendMessage()
-    if form.validate_on_submit():
-        for l in form.login_to.data:
-            id_to = User.query.filter_by(username=l).first_or_404()
-            message = models.Message(id_from=current_user.id, id_to=id_to.id, text=form.message.data)
-            db.session.add(message)
-        db.session.commit()
-        return redirect(url_for('user', username=current_user.username))
-    return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=msgs, form=form)
+    return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=msgs, form=form, id_to=id_to)
 
 
 @application.route('/change_role', methods=['GET', 'POST'])
@@ -316,5 +312,6 @@ def change_role():
     return render_template('users.html', title='Смена роли', users=users, form=form, roles=rolesss)
 
 if __name__ == '__main__':
-    application.run()
     socketio.run(application)
+    application.run()
+
