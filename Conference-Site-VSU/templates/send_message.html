@@ -75,23 +75,21 @@
                                 }
                             </style>
 
-                                {% for (msg in msgs) %}
-                                {% if (current_user == msg.received) %}
+                                {% for msg in msgs %}
+                                {% if (current_user.id == msg.recipient.id) %}
                                 <div class="incoming_msg">
-                                  <div class="img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" style="width: 3rem"> </div>
+                                  <div class="img"> <img src=" {{ received.avatar(128) }}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div>
                                   <div class="received_msg">
                                     <div class="received_withd_msg">
-                                      <p>Test which is a new approach to have all
-                                        solutions</p>
-                                      <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                      <p>{{ msg.body }}</p>
+                                      <span class="time_date"> {{ msg.timestamp }}</span></div>
                                   </div>
                                 </div>
                                {% else %}
                                 <div class="outgoing_msg">
                                   <div class="sent_msg">
-                                    <p>Test which is a new approach to have all
-                                      solutions</p>
-                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
+                                    <p>{{ msg.body }}</p>
+                                    <span class="time_date"> {{ msg.timestamp }}</span></div>
                                 </div>
                                 {% endif %}
                                 {% endfor %}
