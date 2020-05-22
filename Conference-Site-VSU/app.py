@@ -232,6 +232,23 @@ def edit_profile():
 @application.route('/send_message', methods=['GET', 'POST'])
 @login_required
 def send_message():
+
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
+    messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
+        models.Message.timestamp.desc()).all())
+    posts = []
+    for m in messages:
+        if user.id == m.id_to:
+            user_to = user
+            user_from = User.query.filter_by(id=m.id_from).first_or_404()
+            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp})
+        else:
+            user_to = User.query.filter_by(id=m.id_to).first_or_404()
+            user_from = user
+            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp})
+
+
     users = User.query.all()
     users_logins = [(i.username, i.username) for i in users]
     SendMessage.setLogins(users_logins)
@@ -243,7 +260,7 @@ def send_message():
             db.session.add(message)
         db.session.commit()
         return redirect(url_for('user', username=current_user.username))
-    return render_template('send_message.html', title='Отправить сообщение', form=form)
+    return render_template('send_message.html', title='Отправить сообщение', posts=posts, form=form)
 
 
 @application.route('/change_role', methods=['GET', 'POST'])

@@ -1,11 +1,105 @@
 {% extends "base.html" %}
 {% import '/bootstrap/wtf.html' as wtf %}
 
-{% block app_content %}
-    <h1>Отправить сообщение</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
+{% block content %}
+<script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
+<div class="row">
+    <div class="block col-md-8">
+
+        <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body" style="margin-left:2rem; margin-right: 2rem">
+                <h3>Диалоги</h3>
+                <div class="row mb-3 mr-1 ml-1" style="min-width: 20rem;">
+                    <!-- {{ wtf.quick_form(form) }}-->
+                    <style>
+                        .scroll_post {
+                        height: 25rem; /* высота нашего блока */
+                        width: 20rem; /* ширина нашего блока */
+                        background: none; /* цвет фона, белый */
+                        border: 1px solid #c4c4c4; /* размер и цвет границы блока */
+                        overflow-y: scroll; /* прокрутка по вертикали */
+                        }
+                    </style>
+                    <!--div class="card col-md-6 col-sm-2" style="padding:0;"-->
+                        <div class="scroll_post" style="padding:1rem; background-color: rgba(236, 231, 231, 0.3);border-radius: 1rem;">
+                            {% for post in posts %}
+                                {% include '_post.html' %}
+                            {% endfor %}
+                        </div>
+                    <!--/div-->
+
+                    <div class="scroll_post" style="padding:1rem; margin-left: 3rem; border-radius: 1rem; ">
+
+
+                            <style>
+                                .mesgs {
+                                  float: left;
+                                  padding: 30px 15px 0 25px;
+                                  width: 60%;
+                                }
+                                .msg_history {
+                                  height: 516px;
+                                  overflow-y: auto;
+                                }
+                                .outgoing_msg{ overflow:hidden; }
+                                .incoming_msg_img {
+                                  float: left;
+                                  width: 11%;
+                                }
+                                .received_msg {
+                                  display: inline-block;
+                                  padding: 5px 0 0 10px;
+                                  vertical-align: top;
+                                  width: 92%;
+                                 }
+                                 .received_withd_msg p {
+                                  background: #ebebeb none repeat scroll 0 0;
+                                  border-radius: 3px;
+                                  color: #646464;
+                                  font-size: 14px;
+                                  margin: 0;
+                                  padding: 5px 10px 5px 12px;
+                                  width: 100%;
+                                }
+                                .outgoing_msg{ overflow:hidden; margin:26px 0 15px;}
+                                .sent_msg {
+                                  float: right;
+                                  width: 60%;
+                                }
+                                .time_date {
+                                  color: #747474;
+                                  display: block;
+                                  font-size: 12px;
+                                  margin: 5px 0 0;
+                                }
+                            </style>
+
+                                {% for (msg in msgs) %}
+                                {% if (current_user == msg.received) %}
+                                <div class="incoming_msg">
+                                  <div class="img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil" style="width: 3rem"> </div>
+                                  <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                      <p>Test which is a new approach to have all
+                                        solutions</p>
+                                      <span class="time_date"> 11:01 AM    |    June 9</span></div>
+                                  </div>
+                                </div>
+                               {% else %}
+                                <div class="outgoing_msg">
+                                  <div class="sent_msg">
+                                    <p>Test which is a new approach to have all
+                                      solutions</p>
+                                    <span class="time_date"> 11:01 AM    |    June 9</span> </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}

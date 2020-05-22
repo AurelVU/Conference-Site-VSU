@@ -1,11 +1,67 @@
 {% extends "base.html" %}
+
 {% block content %}
+<script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
 <div class="row">
     <div class="block col-md-8">
         <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
 				<h3 class="card-title">Архив работ</h3>
+						<style>
+							.scroll_post {
+							height: 23rem; /* высота нашего блока */
+							width: 40rem; /* ширина нашего блока */
+							background: none; /* цвет фона, белый */
+							border: none; /* размер и цвет границы блока */
+							overflow-y: scroll; /* прокрутка по вертикали */
+							}
+						</style>
+				{% if current_user.role == 2 %}
+					<div id="back_search_add_btn" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
+						<div class="card col-md-4 col-sm-6" style="border: none;">
+							<button type="button" class="btn btn-outline-secondary" style="width: 100px; hight: 30px;">Назад</button>
+						</div>
+
+						<div class="card col-md-4 col-sm-8 bg-secondary "
+							 style=" border: none; margin-top:10px; ">
+							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
+							  <input type="hidden"  style="all: unset;" name="searchid">
+							  <input type="search" style="all: unset;" name="text" required placeholder="Поиск архивов">
+
+							  <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback">
+							</form>
+						</div>
+
+						 <div class="card col-md-4 col-sm-4" style="border:none; ">
+							<button type="button" class="btn btn-primary" onclick="window.location.href=''" style=" margin:left">Добавить</button>
+						</div>
+
+					</div>
+
+					<div class="scroll_post">
+						<div id="card-downloads" class="row mb-3 mr-1 ml-1" >
+
+							{% set news = [
+							{'image':'../static/images/volume/Cover_13_1.png', 'title': 'Работы студентов бакалавриата', 'text': 'Выпуск 13 часть 1 (2019)', 'drive':'https://drive.google.com/open?id=1LO6jQ-bi4C3U3qNQbBVN30zCOqwtw9Az'},
+							{'image':'../static/images/volume/Cover_13_2.png', 'title': 'Работы студентов магистрантов', 'text': 'Выпуск 13 часть 2 (2019)', 'drive':'https://drive.google.com/open?id=1XF1MwZt0dsT-x5i5Ir0XEYScToucTR91'},
+							{'image':'../static/images/volume/Cover_12.png', 'title': 'Работы студентов', 'text': 'Выпуск 12 (2017)', 'drive':'https://drive.google.com/open?id=12tYw_2HrdWXO9Ncpbdke5cCv7sEuB3bO'},
+							{'image':'../static/images/volume/Cover_11.png', 'title': 'Работы студентов', 'text': 'Выпуск 11 (2016)', 'drive':'https://drive.google.com/open?id=1F7ELS2NhtiQamfmRCyjojIXL-cyA4hVH'}
+							] %}
+							{% for new in news %}
+							<div class="card col-md-4 col-sm-8 mb-1"  >
+								<div class="card-body" style="display: block; margin: center; padding:10px;">
+									<img class="card-img-top img-fluid rounded mb-2" style="width: 10rem;" src="{{new.image}}" alt="Card image cap">
+									<h5 class="card-title">{{new.title}}</h5>
+									<p class="card-text">{{new.text}}</p>
+									<a href="{{new.drive}}" class="btn btn-primary">Скачать</a>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% else %}
+					<div class="scroll_post">
 						<div id="card-curators" class="row mb-3 mr-1 ml-1" >
 
 							<!--<div class="card" style="width: 12rem;">
@@ -155,6 +211,11 @@
 
 						</div>
 						-->
+				</div>
+
+				{% endif %}
+
+
 			</div>
 		</div>
 	</div>

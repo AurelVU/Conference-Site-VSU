@@ -19,3 +19,30 @@ max-width: 660px;
 .border{
  border: 1px solid #55595c8a;
 }
+
+.scroll_bar{
+height: 25rem; /* высота нашего блока */
+width: 20rem; /* ширина нашего блока */
+background: none; /* цвет фона, белый */
+border: none; /* размер и цвет границы блока */
+overflow-y: scroll; /* прокрутка по вертикали */
+}
+
+.chat_people{ overflow:hidden; clear:both;}
+.chat_list {
+  border-bottom: 1px solid #c4c4c4;
+  margin: 0;
+  padding: 18px 16px 10px;
+}
+.chat_ib h6{ font-size:15px; color:#464646; margin:0 0 8px 0;}
+.chat_ib h6 span{ font-size:13px; float:right;}
+.chat_ib p{ font-size:14px; color:#989898; margin:auto}
+.chat_img {
+  float: left;
+  width: 11%;
+}
+.chat_ib {
+  float: left;
+  padding: 0 0 0 15px;
+  width: 88%;
+}
