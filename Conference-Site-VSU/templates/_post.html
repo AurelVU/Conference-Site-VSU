@@ -69,7 +69,7 @@
             </div>
         </div>
         <div id="layer" class="er">
-            <a href="{{ url_for('send_message') }}">.</a>
+            <a href="{{ url_for('send_message', id_to=post.recipient.id if not(post.recipient.id == current_user.id) else post.author.id) }}">.</a>
         </div>
     </div>
 
