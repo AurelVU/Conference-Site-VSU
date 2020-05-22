@@ -14,7 +14,7 @@
                 socket.emit('joined', {});
             });
             socket.on('status', function(data) {
-                $('#chat')[0].innerHTML += '<' + data.msg + '>\n';
+                $('#chat')[0].innerHTML += '<p>' + data.msg + '</p>';
                 // $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
                 //$('#chat')[0].scrollTop($('#chat')[0].scrollHeight);
                 $('#chat')[0].scrollTop = $('#chat')[0].scrollHeight;
@@ -44,7 +44,7 @@
             $('#text').val('');
             socket.emit('text', {msg: text, id_from: {{ current_user.id }}, id_to: {{ id_to }} });
         }
-        function leave_room() {
+        window.onbeforeunload = function() {
             socket.emit('left', {}, function() {
                 socket.disconnect();
             });
