@@ -244,19 +244,23 @@ def send_message():
         models.Message.timestamp.desc()).all())
     posts = []
     msgs = []
-
+    users = set()
     received = None
     for m in messages:
         if user.id == m.id_to:
             user_to = user
             user_from = User.query.filter_by(id=m.id_from).first_or_404()
             received = user_from
-            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+            if not(user_from.id in users):
+                posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+                users.add(user_from.id)
         else:
             user_to = User.query.filter_by(id=m.id_to).first_or_404()
             user_from = user
             received = user_to
-            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+            if not (user_to.id in users):
+                posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+                users.add(user_to.id)
 
     if request.args.get('id_to'):
         id_to = int(request.args['id_to'])
