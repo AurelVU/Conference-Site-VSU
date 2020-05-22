@@ -73,6 +73,32 @@
                                   font-size: 12px;
                                   margin: 5px 0 0;
                                 }
+                                .type_msg {
+                                  border-top: 1px solid #ebebeb;
+                                  position: absolute;
+                                  bottom: 6%;
+                                }
+                                .input_msg_write textarea {
+                                  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+                                  border: medium none #ebebeb;
+                                  color: #ebebeb;
+                                  font-size: 1rem;
+                                  min-height: 1rem;
+                                  width: 17rem;
+                                }
+                                .msg_send_btn {
+                                  background: #ebebeb none repeat scroll 0 0;
+                                  border: medium none #ebebeb;
+                                  border-radius: 50%;
+                                  color: #ebebeb;
+                                  cursor: pointer;
+                                  font-size: 17px;
+                                  height: 33px;
+                                  position: absolute;
+                                  right: 1%;
+                                  top: 11px;
+                                  width: 33px;
+                                }
                             </style>
 
                                 {% for msg in msgs %}
@@ -93,6 +119,14 @@
                                 </div>
                                 {% endif %}
                                 {% endfor %}
+
+                        <div class="type_msg">
+                            <form action="/send/" target="_blank" class="input_msg_write form-search">
+                                <textarea type="text" name="message" required placeholder="Type a message"></textarea>
+                              <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                            </form>
+                        </div>
+
                     </div>
 
                 </div>
