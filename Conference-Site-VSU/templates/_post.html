@@ -13,8 +13,25 @@
         .chat_list {
           background: rgba(237, 237, 237, 0.3) none repeat scroll 0 0;
           border-bottom: 1px solid #c4c4c4;
+          height: 5.5rem;
           margin: 0;
           padding: 18px 16px 10px;
+        }
+
+        #layer {
+          position: relative; /* Относительное позиционирование */
+          top: -3.5rem; /* Сдвигаем текст вверх */
+          font-size:0;  /* Размер шрифта в пикселах */
+          z-index: 1;
+        }
+        .er{
+          width: 14rem; /* Ширина слоя */
+          height: 3.5rem; /* Высота слоя */
+          background: none;
+        }
+        .er a{
+          display: block;
+          height: 100%;
         }
         .chat_ib h6{ font-size:15px; color:#464646; margin:0 0 8px 0;}
         .chat_ib h6 span{ font-size:13px; float:right;}
@@ -34,11 +51,13 @@
         }
     </style>
 
+
     <div class="chat_list">
+
         <div class="chat_people">
             <div class="chat_img"><img src="{{ post.recipient.avatar(36) }}" alt="Card image cap" style="border-radius: 1rem;"></div>
             <div class="chat_ib">
-                <h6 class="card-title">{{ post.recipient.username }}
+                <h6 class="card-title"><a href="{{ url_for('send_message') }}">{{ post.recipient.username }}</a>
                     <span class="chat_date">
                         <small class="text-muted">{{ post.timestamp }}</small>
                     </span>
@@ -48,6 +67,9 @@
                     <p>{{ post.body }}</p>
                 </div>
             </div>
+        </div>
+        <div id="layer" class="er">
+            <a href="{{ url_for('send_message') }}">.</a>
         </div>
     </div>
 
