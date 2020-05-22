@@ -71,9 +71,32 @@
                             border: none;/*1px solid #c4c4c4;  размер и цвет границы блока */
                             overflow-y: scroll; /* прокрутка по вертикали */
                             }
+                            #style-11::-webkit-scrollbar {
+                                width: 10px;
+                                background-color: #F5F5F5;
+                            }
+                            #style-11::-webkit-scrollbar-track {
+                              border-radius: 10px;
+                              background: rgba(0,0,0,0.1);
+                              border: 1px solid #ccc;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb {
+                              border-radius: 10px;
+                              background: linear-gradient(left, #fff, #e4e4e4);
+                              border: 1px solid #aaa;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb:hover {
+                              background: #fff;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb:active {
+                              background: linear-gradient(left, #22ADD4, #1E98BA);
+                            }
                         </style>
 
-                        <div class="scroll_post" >
+                        <div class="scroll_post" id="style-11">
                             {% for post in posts %}
                                 {% include '_post.html' %}
                             {% endfor %}
@@ -81,6 +104,29 @@
                         </div>
                     </div>
                         <style>
+                                #chat::-webkit-scrollbar {
+                                    width: 10px;
+                                    background-color: #F5F5F5;
+                                }
+                                #chat::-webkit-scrollbar-track {
+                                  border-radius: 10px;
+                                  background: rgba(0,0,0,0.1);
+                                  border: 1px solid #ccc;
+                                }
+
+                                #chat::-webkit-scrollbar-thumb {
+                                  border-radius: 10px;
+                                  background: linear-gradient(left, #fff, #e4e4e4);
+                                  border: 1px solid #aaa;
+                                }
+
+                                #chat::-webkit-scrollbar-thumb:hover {
+                                  background: #fff;
+                                }
+
+                                #chat::-webkit-scrollbar-thumb:active {
+                                  background: linear-gradient(left, #22ADD4, #1E98BA);
+                                }
                                 .mesgs {
                                   float: left;
                                   padding: 30px 15px 0 25px;
