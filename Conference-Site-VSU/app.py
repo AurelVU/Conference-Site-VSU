@@ -2,6 +2,9 @@
 import os
 
 from config import UPLOAD_DIR
+from flask_socketio import SocketIO
+
+socketio = SocketIO()
 
 from flask import render_template, redirect, url_for, flash, request, send_from_directory
 from flask_bootstrap import Bootstrap
@@ -12,6 +15,7 @@ from flasgger import Swagger
 from init import application, db
 
 Swagger(application)
+
 
 import models
 from forms import *
@@ -233,11 +237,17 @@ def edit_profile():
 @login_required
 def send_message():
 
+
     user = User.query.filter_by(username=current_user.username).first_or_404()
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
         models.Message.timestamp.desc()).all())
+
+
+
     posts = []
+    msgs = []
+
     received = None
     for m in messages:
         if user.id == m.id_to:
@@ -251,6 +261,24 @@ def send_message():
             received = user_to
             posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
 
+    if (request.args['id_to']):
+        id_to = int(request.args['id_to'])
+        messages2 = models.Message.query.filter_by(id_to=user.id).filter_by(id_from=id_to).join(User, (
+                    User.id == models.Message.id_from)).all()
+        messages2 += (models.Message.query.filter_by(id_from=user.id).filter_by(id_to=id_to).join(User, (
+                    User.id == models.Message.id_to)).order_by(
+            models.Message.timestamp.desc()).all())
+        for m in messages2:
+            if user.id == m.id_to:
+                user_to = user
+                user_from = User.query.filter_by(id=m.id_from).first_or_404()
+                received = user_from
+                msgs.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+            else:
+                user_to = User.query.filter_by(id=m.id_to).first_or_404()
+                user_from = user
+                received = user_to
+                msgs.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
 
     users = User.query.all()
     users_logins = [(i.username, i.username) for i in users]
@@ -263,7 +291,7 @@ def send_message():
             db.session.add(message)
         db.session.commit()
         return redirect(url_for('user', username=current_user.username))
-    return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=posts, form=form)
+    return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=msgs, form=form)
 
 
 @application.route('/change_role', methods=['GET', 'POST'])
@@ -288,3 +316,4 @@ def change_role():
 
 if __name__ == '__main__':
     application.run()
+    socketio.run(application)
