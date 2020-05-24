@@ -42,11 +42,7 @@
 							}
 						</style>
 				{% if current_user.role == 2 %}
-					<div id="back_search_add_btn" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
-						<div class="card col-md-4 col-sm-6" style="border: none;">
-							<button type="button" class="btn btn-outline-secondary" style="width: 100px; hight: 30px;">Назад</button>
-						</div>
-
+					<div id="back_search_add_btn" class="row mb-3 mt-3">
 						<div class="card col-md-4 col-sm-8 bg-secondary "
 							 style=" border: none; margin-top:10px; ">
 							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
@@ -62,6 +58,8 @@
 						</div>
 
 					</div>
+
+					<div class="card bg-dark mb-4" style="hight: 1px"></div>
 
 					<div class="scroll_post" id="style-11">
 						<div id="card-downloads" class="row mb-3 mr-1 ml-1" >

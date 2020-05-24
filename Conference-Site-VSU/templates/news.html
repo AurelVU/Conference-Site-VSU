@@ -8,13 +8,11 @@
 		<div id="adm_information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
 			<div class="card-header bg-dark"></div>
 			<div class="card-body" style="margin-left:70px; margin-right: 70px">
+				<h3 class="card-title">Новости</h3>
             {% if current_user.role == 2 %}
 				<h3 class="card-title"></h3>
 
 					<div id="back_search_add_btn" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
-						<div class="card col-md-4 col-sm-6" style="border: none;">
-							<button type="button" class="btn btn-outline-secondary" style="width: 100px; hight: 30px;">Назад</button>
-						</div>
 
 						<div class="card col-md-4 col-sm-8 bg-secondary "
 							 style=" border: none; margin-top:10px; ">
@@ -61,7 +59,6 @@
 					{% include '_news_block.html' %}
 
 				{% else %}
-				<h3 class="card-title">Новости</h3>
 					{% include '_news_block.html' %}
 				{% endif %}
 			</div>

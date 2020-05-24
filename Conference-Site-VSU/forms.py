@@ -42,8 +42,8 @@ class EditPasswordForm(FlaskForm):
     submit = SubmitField('Изменить пароль')
 
 class UploadArticle(FlaskForm):
-    name = StringField('Название статьи', validators=[DataRequired()])
-    file = FileField('Файл вашей работы', validators=[DataRequired(), FileRequired(), FileAllowed(['pdf', 'docx', 'rtx'], 'Только документы формата pdf, docx, rtx')])
+    name = StringField(validators=[DataRequired()])
+    file = FileField(validators=[DataRequired(), FileRequired(), FileAllowed(['pdf', 'docx', 'rtx'], 'Только документы формата pdf, docx, rtx')])
     submit = SubmitField('Отправить')
 
 class SendMessage(FlaskForm):
@@ -57,7 +57,7 @@ class SendMessage(FlaskForm):
 
 class ChangeUser(FlaskForm):
     def setRoles(roles):
-        ChangeUser.role = SelectMultipleField('Роль', validators=[DataRequired()], choices=roles)
+        ChangeUser.role = SelectField('Роль', validators=[DataRequired()], choices=roles)
         ChangeUser.submit = SubmitField('Отправить')
         ChangeUser.id = HiddenField('id')
 

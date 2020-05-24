@@ -2,13 +2,65 @@
 {% import '/bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>Добавить статью</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
+
+<div class="row">
+    <div class="block col-md-8">
+
+        <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
+            <div class="card-header bg-dark"></div>
+            <div class="card-body" style="margin-left:70px; margin-right: 70px">
+                <h3 class="card-title">Ваши статьи</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>{{ form.name(class_='form-control', style='min-width: 5rem', placeholder='Название вашей статьи' ) }}</p>
+                        <p>{{ form.file(class_='form-control-file') }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <a>{{ form.submit(class_='btn btn-outline-secondary pull-left', style='padding: 3.3%') }}</a>
+                    </div>
+                </div>
+                <div class="card bg-dark mb-4" style="hight: 1px"></div>
+
+                <style>
+                            #style-11::-webkit-scrollbar {
+                            width: 10px;
+                            background-color: #F5F5F5;
+                            }
+
+                            #style-11::-webkit-scrollbar-track {
+                              border-radius: 10px;
+                              background: rgba(0,0,0,0.1);
+                              border: 1px solid #ccc;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb {
+                              border-radius: 10px;
+                              background: linear-gradient(left, #fff, #e4e4e4);
+                              border: 1px solid #aaa;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb:hover {
+                              background: #fff;
+                            }
+
+                            #style-11::-webkit-scrollbar-thumb:active {
+                              background: linear-gradient(left, #22ADD4, #1E98BA);
+                            }
+							.scroll_post {
+							height: 23rem; /* высота нашего блока */
+							width: 40rem; /* ширина нашего блока */
+							background: none; /* цвет фона, белый */
+							border: none; /* размер и цвет границы блока */
+							overflow-y: scroll; /* прокрутка по вертикали */
+							}
+						</style>
+                <div class="scroll_post" id="style-11">
+                    {% for article in articles %}
+                        {% include '_article.html' %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    {% for article in articles %}
-        {% include '_article.html' %}
-    {% endfor %}
+</div>
 {% endblock %}

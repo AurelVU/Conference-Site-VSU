@@ -58,10 +58,16 @@
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:2rem; margin-right: 2rem">
                 <h3>Диалоги</h3>
+
+
+
                 <div class="row mb-3 mr-1 ml-1" style="min-width: 20rem;">
 
                     <div class="card col-md-6 col-sm-2" style="padding:0; background-color: rgba(236, 231, 231, 0.3); border-radius: 1rem;">
                         <div class="card-body" style="padding:1rem;">
+
+                                <button type="button" class="btn btn-outline-secondary ml-2 mb-3" style="width: 100px; hight: 30px; padding: 1px;">Назад</button>
+
                         <style>
                             .scroll_post {
                             height: 25rem; /* высота нашего блока */
@@ -102,6 +108,7 @@
                         </div>
                         </div>
                     </div>
+
                         <style>
                                 #chat::-webkit-scrollbar {
                                     width: 10px;
@@ -175,24 +182,37 @@
                                   background: #ffff none repeat scroll 0 0;
                                   border: medium none #ebebeb;
                                   color: #646464;
+                                  resize : none;
+                                  outline : none;
+                                  width: 15rem;
+                                  overflow:hidden;
                                   font-size: 1rem;
                                   min-height: 1rem;
-                                  width: 18rem;
+
                                 }
                                 .msg_send_btn {
                                   background: #ebebeb none repeat scroll 0 0;
                                   border: medium none #ebebeb;
                                   border-radius: 50%;
-                                  color: #ebebeb;
+                                  color: #747474;
+                                  outline : none;
                                   cursor: pointer;
                                   font-size: 17px;
                                   height: 33px;
-                                  position: absolute;
+                                  position: -webkit-sticky;
+                                  position: sticky;
                                   right: 1%;
-                                  top: 11px;
+                                  top: 20px;
                                   width: 33px;
                                 }
+                                button:active, button:focus {
+                                  outline: none;
+                                }
+                                button::-moz-focus-inner {
+                                  border: 0;
+                                }
                             </style>
+
                     <div class="card col-md-6 col-sm-2" style="border-radius: 1rem;" >
                         <div class="card-body">
                             <div class="scroll_post" id="chat" style="margin-bottom: 4.5rem;">
@@ -206,8 +226,10 @@
                                   <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
                                 </form> -->
                                 <div class="input_msg_write">
-                                    <textarea id="text" type="text" name="message" required placeholder="Type a message"></textarea>
-                                    <button class="msg_send_btn" type="button" onclick="send();"><i class="fa fa-paper-plane-o" aria-hidden="true" ></i></button>
+                                    <div class="row mb-2 mr-1 ml-1 mt-1">
+                                        <textarea id="text" type="text" name="message" required placeholder="Type a message" ></textarea>
+                                        <button class="msg_send_btn ml-1 mt-2" type="button" onclick="send();"><i class="fa fa-paper-plane" aria-hidden="true" ></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
