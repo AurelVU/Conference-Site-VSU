@@ -14,13 +14,13 @@
                 <div id="back_search_add_btn" class="row mb-3 mt-3" style="max-width: 1024px; max-hight: 30px;">
 
                         <div class="card col-md-4 col-sm-6" style="border: none;">
-                            <button type="button" class="btn btn-outline-secondary" style="width: 100px; hight: 30px; padding:1%">Назад</button>
+                            <button type="button" onclick="history.back();"  class="btn btn-outline-secondary" style="width: 100px; hight: 30px; padding:1%">Назад</button>
 						</div>
 						<div class="card col-md-5 col-sm-8 bg-secondary"
 							 style=" border: none;">
-							<form action="/search/" target="_blank" class="form-search" style="border-bottom: 1px solid; display: inline-block;">
-							  <input type="hidden"  style="all: unset;" name="searchid">
-							  <input type="search" style="all: unset;" name="text" required placeholder="Поиск">
+							<form action="{{ url_for('users') }}"  class="form-search" style="border-bottom: 1px solid; display: inline-block;">
+							  <!--<input type="hidden"  style="all: unset;" name="searchid">-->
+							  <input type="search" style="all: unset;" name="search" required placeholder="Поиск">
 
 							  <input type="image" style="width:16px; hight:16px;" src="../static/images/magnifying-glass.png" alt="Submit feedback">
 							</form>

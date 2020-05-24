@@ -67,10 +67,10 @@
                                 <p><a href="{{ url_for('edit_profile') }}">Изменить ваш профиль</a></p>
                                 <p><a href="{{ url_for('send_message') }}">Отправить сообщение</a></p>
                                 <p><a href="{{ url_for('article') }}">Ваши статьи</a></p>
-                                {% if current_user.role == 2 %}
-                                <p><a href="{{ url_for('article') }}">Статьи пользователей</a></p>
+                                {% if current_user.role == 2 or current_user.role == 3 %}
+                                <p><a href="{{ url_for('articles') }}">Статьи пользователей</a></p>
                                 {% endif %}
-                                <p><a href="{{ url_for('change_role') }}">Список пользователей</a></p>
+                                <p><a href="{{ url_for('users') }}">Список пользователей</a></p>
 
                             {% endif %}
 

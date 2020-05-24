@@ -19,10 +19,13 @@
             <h5 class="card-title" style="margin-bottom: 0;">
                 <img src="{{ user.avatar(36) }}" alt="Card image cap">
                 {{ user.username }}
-                <button class="btn btn-outline-secondary pull-right" style="color: #646464; padding:1%" type="button" onclick="send();">
+                <form action="{{ url_for('send_message') }}">
+                <button class="btn btn-outline-secondary pull-right" style="color: #646464; padding:1%" type="submit" onclick="send();">
                      Написать
                     <i class="fa fa-paper-plane" aria-hidden="true" ></i>
                 </button>
+                    <input type="hidden" name="id_to" value="{{ user.id }}">
+                </form>
             </h5>
          </div>
 

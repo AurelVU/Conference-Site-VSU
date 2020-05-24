@@ -168,6 +168,27 @@ def article():
 
         return render_template('articles.html', form=form, articles=articlesss)
 
+
+@application.route('/articles', methods=['GET', 'POST'])
+@login_required
+def articles():
+    if current_user.role == 2 or current_user.role == 3:
+        articles = models.Article.query.all()
+        files = models.File.query.all()
+        articlesss = []
+        st = models.Status.query.all()
+        statuses = {}
+        for s in st:
+            statuses[s.id] = s.name
+        for art in articles:
+            for f in files:
+                if art.file == f.id:
+                    articlesss.append({'article': art, 'file': f, 'owner' : current_user.username, 'stat' : statuses[art.stat], 'timestamp' : art.timestamp.strftime("%d.%m.%Y %H:%M:%S") })
+
+        return render_template('all_articles.html', form=form, articles=articlesss)
+    else:
+        return 'Ошибка доступа'
+
 @application.route('/user/<username>')
 @login_required
 def user(username):
@@ -176,16 +197,25 @@ def user(username):
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
         models.Message.timestamp.desc()).all())
     posts = []
-    messages = sorted(messages, key=attrgetter('timestamp'))
+    users = set()
+    messages = sorted(messages, key=attrgetter('timestamp'), reverse=True)
     for m in messages:
         if user.id == m.id_to:
             user_to = user
             user_from = User.query.filter_by(id=m.id_from).first_or_404()
-            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+            received = user_from
+            if not (user_from.id in users):
+                posts.append({'author': user_from, 'recipient': user_to, 'body': m.text,
+                              'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+                users.add(user_from.id)
         else:
             user_to = User.query.filter_by(id=m.id_to).first_or_404()
             user_from = user
-            posts.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+            received = user_to
+            if not (user_to.id in users):
+                posts.append({'author': user_from, 'recipient': user_to, 'body': m.text,
+                              'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+                users.add(user_to.id)
 
     return render_template('user.html', user=user, posts=posts)
 
@@ -245,7 +275,7 @@ def send_message():
     msgs = []
     users = set()
     received = None
-    messages = sorted(messages, key=attrgetter('timestamp'))
+    messages = sorted(messages, key=attrgetter('timestamp'), reverse = True)
     for m in messages:
         if user.id == m.id_to:
             user_to = user
@@ -272,17 +302,26 @@ def send_message():
                     User.id == models.Message.id_to)).order_by(
             models.Message.timestamp.desc()).all())
         messages2 = sorted(messages2, key=attrgetter('timestamp'))
+        flag = False
         for m in messages2:
             if user.id == m.id_to:
                 user_to = user
                 user_from = User.query.filter_by(id=m.id_from).first_or_404()
                 received = user_from
+                if received.id == int(id_to):
+                    flag = True
                 msgs.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
             else:
                 user_to = User.query.filter_by(id=m.id_to).first_or_404()
                 user_from = user
                 received = user_to
+                if received.id == int(id_to):
+                    flag = True
                 msgs.append({'author': user_from, 'recipient': user_to, 'body': m.text, 'timestamp': m.timestamp.strftime("%d.%m.%Y %H:%M:%S")})
+
+        if not flag:
+            to = User.query.filter_by(id=int(id_to)).first_or_404()
+            posts.append({'author': user, 'recipient': to, 'body': '', 'timestamp': ''})
 
     users = User.query.all()
     users_logins = [(i.username, i.username) for i in users]
@@ -291,10 +330,15 @@ def send_message():
     return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=msgs, form=form, id_to=id_to)
 
 
-@application.route('/change_role', methods=['GET', 'POST'])
+@application.route('/users', methods=['GET', 'POST'])
 @login_required
-def change_role():
-    users = User.query.all()
+def users():
+    users = []
+    if request.args.get('search'):
+        string = request.args['search']
+        users = User.query.filter(User.username.like(string + '%')).all()
+    else:
+        users = User.query.all()
     roles = models.Role.query.all()
     current_role = [(i.id, i.name) for i in roles]
     ChangeUser.setRoles(current_role)
