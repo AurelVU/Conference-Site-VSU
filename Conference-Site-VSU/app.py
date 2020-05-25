@@ -143,16 +143,22 @@ def add_news():
 def article():
     form = UploadArticle()
     if form.validate_on_submit():
-        current_file = form.file.data
-        file = models.File.upload(current_file)
-        db.session.add(file)
-        db.session.commit()
-        idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
-        article = models.Article(file=idfile.id, name=form.name.data, stat=1)
-        db.session.add(article)
-        db.session.commit()
+        block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
+        if (block is None) or not (block.block_article):
+            if (block.block_file):
+                return 'Блокировка загрузки файлов'
+            current_file = form.file.data
+            file = models.File.upload(current_file)
+            db.session.add(file)
+            db.session.commit()
+            idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
+            article = models.Article(file=idfile.id, name=form.name.data, stat=1)
+            db.session.add(article)
+            db.session.commit()
 
-        return redirect(url_for('article'))
+            return redirect(url_for('article'))
+        else:
+            return 'Блокировка добавления статей'
     else:
         articles = models.Article.query.join(models.File, (models.File.id == models.Article.file)).all()
         files = models.File.query.filter(models.File.owner == current_user.id).all()
