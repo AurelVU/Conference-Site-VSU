@@ -1,15 +1,19 @@
  <div class="card mb-3 ml-2 mr-2" style="max-width: 50rem;">
          <div class="card-header">
             <h5 class="card-title" style="margin-bottom: 0;">
-                <img src="{{ user.avatar(36) }}" alt="Card image cap">
-                {{ user.username }}
-                <form action="{{ url_for('send_message') }}">
-                <button class="btn btn-outline-secondary pull-right" style="color: #646464; padding:1%" type="submit" onclick="send();">
-                     Написать
-                    <i class="fa fa-paper-plane" aria-hidden="true" ></i>
-                </button>
-                    <input type="hidden" name="id_to" value="{{ user.id }}">
-                </form>
+                <div class="row">
+                    <div class="col-sm-6" >
+                        <img src="{{ user.avatar(36) }}" alt="Card image cap">
+                        {{ user.username }}
+                    </div>
+                    <form class="col-sm-6" action="{{ url_for('send_message') }}">
+                    <button class="btn btn-outline-secondary pull-right" style="color: #646464; padding:2%" type="submit" onclick="send();">
+                         Написать
+                        <i class="fa fa-paper-plane" aria-hidden="true" ></i>
+                    </button>
+                        <input type="hidden" name="id_to" value="{{ user.id }}">
+                    </form>
+                </div>
             </h5>
          </div>
 
