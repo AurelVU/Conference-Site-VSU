@@ -329,6 +329,29 @@ def send_message():
     form = SendMessage()
     return render_template('send_message.html', title='Отправить сообщение', posts=posts, received=received, msgs=msgs, form=form, id_to=id_to)
 
+@application.route('/change_role', methods=['POST'])
+@login_required
+def change_role():
+    if current_user.role == 2:
+        bm = True if request.form.get('bm') else False
+        ba = True if request.form.get('ba') else False
+        bf = True if request.form.get('bf') else False
+        id = request.form['id']
+        block = models.BlockUser.query.filter_by(id_user=id).first()
+        if block:
+            if not((not(bm)) and ((not(ba)) and (not(bf)))):
+                block.block_file = bf
+                block.block_article = ba
+                block.block_message = bm
+            else:
+                models.BlockUser.query.filter_by(id_user=id).delete()
+        else:
+            bl = models.BlockUser(block_message=bm, block_article=ba, block_file=bf, id_user=id)
+            db.session.add(bl)
+        db.session.commit()
+        return redirect(url_for('users'))
+    else:
+        return 'Ошибка доступа'
 
 @application.route('/users', methods=['GET', 'POST'])
 @login_required
@@ -344,6 +367,19 @@ def users():
     ChangeUser.setRoles(current_role)
     form = ChangeUser()
     rolesss = {}
+
+    blockss = dict()
+    for u in users:
+        blockss[u.id] = dict()
+        block = models.BlockUser.query.filter_by(id_user=u.id).first()
+        if block:
+            blockss[u.id]['bm'] = block.block_message
+            blockss[u.id]['ba'] = block.block_article
+            blockss[u.id]['bf'] = block.block_file
+        else:
+            blockss[u.id]['bm'] = False
+            blockss[u.id]['ba'] = False
+            blockss[u.id]['bf'] = False
     for r in roles: #2 - admin, 1 - user, 3 - changer
         rolesss[r.id] = r.name
     if form.submit.data:
@@ -353,7 +389,7 @@ def users():
             User.query.filter_by(id=id_user).update({'role': role})
             db.session.commit()
 
-    return render_template('users.html', title='Смена роли', users=users, form=form, roles=rolesss)
+    return render_template('users.html', title='Смена роли', users=users,blocks=blockss, form=form, roles=rolesss)
 
 if __name__ == '__main__':
     socketio.run(application)

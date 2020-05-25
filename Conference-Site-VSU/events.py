@@ -24,10 +24,13 @@ def text(message):
     The message is sent to all people in the room."""
     room = session.get('room')
     if not (message['msg'].strip() == ""):
-        message_bd = models.Message(id_from=int(message['id_from']), id_to=int(message['id_to']), text=message['msg'])
-        db.session.add(message_bd)
-        db.session.commit()
-        emit('message', {'msg': message['msg'], 'recipient_id': message['id_from'], 'timestamp': str(datetime.now().strftime("%d.%m.%Y %H:%M:%S"))}, room=room)
+        block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
+        if block:
+            if not block.block_message:
+                message_bd = models.Message(id_from=int(message['id_from']), id_to=int(message['id_to']), text=message['msg'])
+                db.session.add(message_bd)
+                db.session.commit()
+                emit('message', {'msg': message['msg'], 'recipient_id': message['id_from'], 'timestamp': str(datetime.now().strftime("%d.%m.%Y %H:%M:%S"))}, room=room)
 
 
 @socketio.on('left', namespace='/send_message')

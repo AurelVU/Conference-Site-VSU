@@ -27,35 +27,33 @@
 
                         </th>
                         <th scope="row">
-
+                        <form action=" {{ url_for('change_role') }} " name="{{ user.id }}" method="post">
                             <div class="form-group">
+                                <input type="hidden" name="id" value="{{ user.id }}">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="">
+                                    <input type="checkbox" class="custom-control-input" onClick="this.form.submit()" name="bm" id="customSwitch1" {% if blocks[user.id]['bm'] %} checked {% else %} {% endif %}>
                                     <label class="custom-control-label" for="customSwitch1">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        <i class="fa fa-envelope{% if not blocks[user.id]['bm'] %}-o{% else %} {% endif %}" aria-hidden="true"></i>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch2" checked="">
+                                    <input type="checkbox" class="custom-control-input" onClick="this.form.submit()" name="ba" id="customSwitch2" {% if blocks[user.id]['ba'] %} checked {% else %} {% endif %}>
                                     <label class="custom-control-label" for="customSwitch2">
-                                        <i class="fa fa-folder" aria-hidden="true"></i>
-                                        <i class="fa fa-folder-o" aria-hidden="true"></i>
+                                        <i class="fa fa-folder{% if not blocks[user.id]['ba'] %}-o{% else %} {% endif %}" aria-hidden="true"></i>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch3" checked="">
+                                    <input type="checkbox" class="custom-control-input" onClick="this.form.submit()" name="bf" id="customSwitch3" {% if blocks[user.id]['bf'] %} checked {% else %} {% endif %}>
                                     <label class="custom-control-label" for="customSwitch3">
-                                        <i class="fa fa-file-text" aria-hidden="true"></i>
-                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                        <i class="fa fa-file-text{% if not blocks[user.id]['bf'] %}-o{% else %} {% endif %} " aria-hidden="true"></i>
                                     </label>
                                 </div>
                             </div>
-
+                        </form>
                         </th>
                         <th scope="row">
                            <form action="users" method="post">
