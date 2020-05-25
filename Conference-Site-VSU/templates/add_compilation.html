@@ -8,13 +8,13 @@
         <div id="information" class="card bg-secondary mb-3 " style="margin-top: 25px;">
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
-				<h3 class="card-title">Добавить новость</h3>
+				<h3 class="card-title">Добавить сборник</h3>
                 <button type="button" onclick="history.back();"  class="btn btn-outline-secondary mb-3" style="width: 100px; hight: 30px; padding:1%">Назад</button>
 
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
                 <div class="row">
-                        <p class="col">{{ form.title(class_='form-control', id="inputDefault", style='outline : none; resize : none;') }}</p>
-                        <p class="col">{{ form.text(class_='form-control', id='exampleTextarea', style='outline : none; resize : none;') }}</p>
+                        <p class="col">{{ form.name(class_='form-control', id="inputDefault", style='outline : none; resize : none;') }}</p>
+                        <p class="col">{{ form.file(class_='form-control-file', style='outline : none;') }}</p>
                         <a class="col">{{ form.submit(class_='btn btn-outline-primary') }}</a>
                 </div>
             </div>

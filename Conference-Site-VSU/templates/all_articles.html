@@ -11,6 +11,8 @@
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
                 <h3 class="card-title">Все статьи</h3>
 
+                <button type="button" onclick="history.back();"  class="btn btn-outline-secondary mb-3" style="width: 100px; hight: 30px; padding:0%">Назад</button>
+
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
 
                 <style>
@@ -46,6 +48,7 @@
 							overflow-y: scroll; /* прокрутка по вертикали */
 							}
 						</style>
+
                 <div class="scroll_post" id="style-11">
                     {% for article in articles %}
                         {% include '_article.html' %}

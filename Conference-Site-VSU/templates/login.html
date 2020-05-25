@@ -9,8 +9,8 @@
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
                 <h3>Войти</h3>
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="card bg-dark mb-4" style="hight: 1px"></div>
+                    <div class="card" align="auto" style="margin: auto; border: none;">
                         {{ wtf.quick_form(form) }}
                     </div>
                 </div>
@@ -19,3 +19,8 @@
     </div>
 </div>
 {% endblock %}
+<!--<p>{{ form.username(class_='form-control', placeholder='Логин', style='outline : none; resize : none;') }}</p>
+                         <p>{{ form.password(class_='form-control',  placeholder='Пароль', style='outline : none; resize : none;') }}</p>
+                         <p>{{ form.remember_me() }}</p>
+                         <a style="margin: auto;">{{ form.submit(class_='btn btn-outline-primary') }}</a>
+                         -->

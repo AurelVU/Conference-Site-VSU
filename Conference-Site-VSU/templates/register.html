@@ -9,9 +9,29 @@
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
                 <h3>Регистрация</h3>
-                <div class="col-md-6 col-sm-3 mb-1">
-                    {{ wtf.quick_form(form) }}
-                </div>
+                <div class="card bg-dark mb-4" style="hight: 1px"></div>
+                <div class="card" align="auto" style="margin: auto; border: none;">
+                    <div class="row" align="auto" style="border: none;">
+                        <!--<div class="col">
+                             <div class="card" align="auto" style=" border: none;">
+                                <p>{{ form.username(class_='form-control', placeholder='Логин', style='outline : none; resize : none;') }}</p>
+                                <p>{{ form.first_name(class_='form-control', placeholder='Имя', style='outline : none; resize : none;') }}</p>
+                                <p>{{ form.second_name(class_='form-control', placeholder='Фамилия', style='outline : none; resize : none;') }}</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                             <div class="card" align="auto" style=" border: none;">
+                                <p>{{ form.email(class_='form-control', placeholder='Email', id='exampleInputEmail1', style='outline : none; resize : none;')}}</p>
+                                <p>{{ form.password(class_='form-control',  placeholder='Новый пароль', style='outline : none; resize : none;') }}</p>
+                                <p>{{ form.password_2(class_='form-control', placeholder='Повторите пароль',  style='outline : none; resize : none;') }}</p>
+                             </div>
+                        </div>
+                     </div>
+                    <a style="margin: auto;">{{ form.submit(class_='btn btn-outline-primary') }}</a>
+                -->
+                        {{ wtf.quick_form(form) }}
+                    </div>
+
             </div>
         </div>
     </div>

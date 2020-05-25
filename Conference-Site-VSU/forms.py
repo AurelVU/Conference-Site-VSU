@@ -12,8 +12,12 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
 
+def validate_space(form, username):
+    if ' ' in username.data:
+        raise ValidationError('Пробел - недопустимый символ')
+
 class RegisterForm(FlaskForm):
-    username = StringField('Логин', validators=[DataRequired()])
+    username = StringField('Логин', validators=[DataRequired(), validate_space])
     email = StringField('email', validators=[Email(), DataRequired()])
     first_name = StringField('Имя', validators=[Length(min=4, max=20)])
     second_name = StringField('Фамилия', validators=[Length(min=2, max=30)])
@@ -33,11 +37,15 @@ class RegisterForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
+    email = StringField('email', validators=[Email(), DataRequired()])
+    first_name = StringField('Имя', validators=[Length(min=4, max=20)])
+    second_name = StringField('Фамилия', validators=[Length(min=2, max=30)])
     about_me = TextAreaField('Обо мне', validators=[Length(min=0, max=140)])
     submit = SubmitField('Подтвердить')
 
 class EditPasswordForm(FlaskForm):
-    password = PasswordField('Пароль', validators=[DataRequired()])
+    old_password = PasswordField('Старый пароль', validators=[DataRequired()])
+    password = PasswordField('Новый пароль', validators=[DataRequired()])
     password_2 = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Изменить пароль')
 
@@ -65,4 +73,9 @@ class ChangeUser(FlaskForm):
 class AddNews(FlaskForm):
     title = StringField('Заголовок', validators=[Length(min=0, max=250)])
     text = TextAreaField('Текст новости', validators=[Length(min=0, max=5000)])
+    submit = SubmitField('Отправить')
+
+class AddCompilation(FlaskForm):
+    name = StringField(validators=[DataRequired()])
+    file = FileField(validators=[DataRequired(), FileRequired(), FileAllowed(['pdf'], 'Только документы формата pdf')])
     submit = SubmitField('Отправить')

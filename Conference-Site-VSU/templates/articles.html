@@ -10,13 +10,16 @@
             <div class="card-header bg-dark"></div>
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
                 <h3 class="card-title">Ваши статьи</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>{{ form.name(class_='form-control', style='min-width: 5rem', placeholder='Название вашей статьи' ) }}</p>
-                        <p>{{ form.file(class_='form-control-file') }}</p>
+                <div class="row mb-3">
+                    <div class="card col-md-4 col-sm-6" style="border: none;">
+                        <button type="button" onclick="history.back();"  class="btn btn-outline-secondary" style="width: 100px; hight: 30px; padding:1%">Назад</button>
                     </div>
-                    <div class="col-md-6">
-                        <a>{{ form.submit(class_='btn btn-outline-secondary pull-left', style='padding: 3.3%') }}</a>
+                    <div class="col-md-8">
+                        <p>{{ form.name(class_='form-control', style='min-width: 5rem', placeholder='Название вашей статьи' ) }}</p>
+                        <div class="row">
+                            <p class="col">{{ form.file(class_='form-control-file', style='outline : none;') }}</p>
+                            <a class="col-md-3">{{ form.submit(class_='btn btn-outline-primary  pull-right') }}</a>
+                        </div>
                     </div>
                 </div>
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>

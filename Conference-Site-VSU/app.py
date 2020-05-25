@@ -120,6 +120,21 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@application.route('/add_compilation', methods=['GET', 'POST'])
+@login_required
+def add_compilation():
+    form = AddCompilation()
+    if current_user.role == 2:
+        if form.validate_on_submit():
+            #title = form.title.data
+            #text = form.text.data
+            #new = models.New(text=text, title=title)
+            #db.session.add(new)
+            #db.session.commit()
+            return redirect(url_for('download'))
+        else:
+            return render_template('add_compilation.html', form=form)
+    return 'Ошибка доступа'
 
 @application.route('/add_news', methods=['GET', 'POST'])
 @login_required
@@ -134,7 +149,7 @@ def add_news():
             db.session.commit()
             return redirect(url_for('news'))
         else:
-            return render_template('articles.html', form=form)
+            return render_template('add_news.html', form=form)
     return 'Ошибка доступа'
 
 
@@ -266,9 +281,28 @@ def edit_profile():
         flash('Your changes have been saved.')
         return redirect(url_for('edit_profile'))
     elif request.method == 'GET':
+        form.email.data = current_user.email
+        form.first_name.data = current_user.first_name
+        form.second_name.data = current_user.last_name
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+
+@application.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = EditPasswordForm()
+    if form.validate_on_submit():
+        if current_user.check_password(form.old_password.data):
+            current_user.set_password(form.password.data)
+            db.session.commit()
+            flash('Your changes have been saved.')
+        else:
+            flash('Password is not correct')
+        return redirect(url_for('change_password'))
+    return render_template('change_password.html', title='Change Password',
+                           form=form)
+
 
 @application.route('/send_message', methods=['GET', 'POST'])
 @login_required
