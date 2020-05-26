@@ -56,7 +56,8 @@
                         </form>
                         </th>
                         <th scope="row">
-                           <form action="users" method="post">
+                           <form action="" method="post">
+                               {{form.hidden_tag()}}
                                 <input type="hidden" name="id" value="{{ user.id }}">
                                 <p>{{ form.role(class_='form-control') }}</p>
                                 <a>{{ form.submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>

@@ -31,8 +31,8 @@ def get_service():
     """Файл token.pickle хранит токены доступа пользователя и обновляет его и является
     создается автоматически при завершении потока авторизации для первого
     время"""
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'token.pickle')):
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'token.pickle'), 'rb') as token:
             creds = pickle.load(token)
     # Если нет доступных (действительных) учетных данных, дайте пользователю войти в систему.
     if not creds or not creds.valid:
@@ -40,10 +40,10 @@ def get_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
+                os.path.join(os.path.dirname(os.path.abspath(__file__)), 'credentials.json'), SCOPES)
             creds = flow.run_local_server(port=0)
         # Сохраните учетные данные для следующего запуска
-        with open('token.pickle', 'wb') as token:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'token.pickle'), 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('drive', 'v3', credentials=creds)

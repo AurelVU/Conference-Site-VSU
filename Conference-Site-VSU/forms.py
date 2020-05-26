@@ -28,12 +28,14 @@ class RegisterForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('Please use a different username.')
+            raise ValidationError('Пожалуйста введите другое имя пользователя.')
+
+
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError('Please use a different email address.')
+            raise ValidationError('Пожалуйста введите другую электронную почту.')
 
 
 class EditProfileForm(FlaskForm):
@@ -78,4 +80,6 @@ class AddNews(FlaskForm):
 class AddCompilation(FlaskForm):
     name = StringField(validators=[DataRequired()])
     file = FileField(validators=[DataRequired(), FileRequired(), FileAllowed(['pdf'], 'Только документы формата pdf')])
+    ico = FileField(validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png'],
+                    'Только "jpg", "jpeg" и "png" файлы поддерживаются')])
     submit = SubmitField('Отправить')

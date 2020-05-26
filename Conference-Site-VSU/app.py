@@ -32,9 +32,7 @@ import googledrive
 @application.route('/')
 @application.route('/index')
 def index():
-    # {% set employee = { 'data': '12.07.2020', 'title': 'Ближайшая конференция;', 'text': 'какой-то текст с информацией о ней' } %}
-#    user_to = User.query.filter_by(id=m.id_to).first_or_404()
-    _news = models.New.query.limit(3).all()
+    _news = models.New.query.order_by(models.New.timestamp.desc()).limit(3).all()
     news = []
     for n in _news:
         news.append({'data': n.timestamp.strftime("%d.%m.%Y"), 'title': n.title, 'text': n.text })
@@ -48,17 +46,34 @@ def contact():
 
 @application.route('/download')
 def download():
+    compitarions = models.Compilation.query.all()
+    files = {}
+    for c in compitarions:
+        file = models.File.query.filter_by(id=c.file).first()
+        files[c] = file
     return render_template("download.html",
-                           title = 'Архив', download='active')
+                           title = 'Архив', compitarions=compitarions, files=files ,download='active')
+
+
+
 
 @application.route('/news')
 def news():
-    _news = models.New.query.all()
+    _news = models.New.query.order_by(models.New.timestamp.desc()).all()
     news = []
     for n in _news:
-        news.append({'data': n.timestamp.strftime("%d.%m.%Y %H:%M:%S"), 'title': n.title, 'text': n.text })
+        news.append({'data': n.timestamp.strftime("%d.%m.%Y %H:%M:%S"), 'title': n.title, 'text': n.text, 'id': n.id })
     return render_template("news.html", newss=news,
                            title = 'Новости', news='active')
+
+@application.route('/delete_news', methods=['POST'])
+@login_required
+def delete_news():
+    if current_user.id == 2:
+        id = request.form['id']
+        models.New.query.filter_by(id=id).delete()
+        db.session.commit()
+        return  redirect(url_for('news'))
 
 @application.route('/paper')
 def paper():
@@ -126,11 +141,19 @@ def add_compilation():
     form = AddCompilation()
     if current_user.role == 2:
         if form.validate_on_submit():
-            #title = form.title.data
-            #text = form.text.data
-            #new = models.New(text=text, title=title)
-            #db.session.add(new)
-            #db.session.commit()
+            name = form.name.data
+            current_file = form.file.data
+            image = form.ico.data
+            file = models.File.upload(current_file, image=True, fileimage=image)
+
+            db.session.add(file)
+            db.session.commit()
+
+
+            file = models.File.query.filter(models.File.drive_file_id==file.drive_file_id).first()
+            compilation = models.Compilation(file=file.id, name=name)
+            db.session.add(compilation)
+            db.session.commit()
             return redirect(url_for('download'))
         else:
             return render_template('add_compilation.html', form=form)
@@ -157,10 +180,10 @@ def add_news():
 @login_required
 def article():
     form = UploadArticle()
-    if form.validate_on_submit():
+    if form.submit.data:
         block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
         if (block is None) or not (block.block_article):
-            if (block.block_file):
+            if block is not None and (block.block_file):
                 return 'Блокировка загрузки файлов'
             current_file = form.file.data
             file = models.File.upload(current_file)
@@ -277,6 +300,9 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         current_user.about_me = form.about_me.data
+        current_user.email = form.email.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.second_name.data
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('edit_profile'))

@@ -22,7 +22,7 @@
             socket.on('message', function(data) {
                 if (  {{ current_user.id }} != Number.parseInt(data.recipient_id))
                 {
-                   $('#chat')[0].innerHTML += ' <div class="incoming_msg">  <div class="img"> <img src=" {{ received.avatar(128) }}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div> <div class="received_msg">  <div class="received_withd_msg">  <p> ' + data.msg + ' </p>  <span class="time_date"> ' + data.timestamp + ' </span></div> </div> </div>';
+                   $('#chat')[0].innerHTML += ' <div class="incoming_msg">  <div class="img"> <img src=" {%  if received is not none %} {{ received.avatar(128) }} {% endif %}" alt="sunil" style="border-radius: 2rem; width: 3rem"> </div> <div class="received_msg">  <div class="received_withd_msg">  <p> ' + data.msg + ' </p>  <span class="time_date"> ' + data.timestamp + ' </span></div> </div> </div>';
                 } else
                 {
                     $('#chat')[0].innerHTML += '<div class="outgoing_msg">      <div class="sent_msg">       <p>' + data.msg + '</p>      <span class="time_date"> ' + data.timestamp  + '  </span></div>   </div>'

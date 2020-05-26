@@ -47,8 +47,11 @@ overflow-y: scroll; /* прокрутка по вертикали */
                         <p class="card-text"><small class="text-muted">Last updated {{new.time}} mins ago</small></p>
                     </div>
                     <div class="card col-md-3 col-sm-1" style="border:none;">
-                        <button type="button" class="btn btn-outline-secondary mb-1 " style=" hight: 30px;">Удалить</button>
-                        <button hidden type="button" class="btn btn-outline-secondary mb-1" style=" hight: 30px;">Изменить</button>
+                        <form action="/delete_news" method="post">
+                            <button type="button" class="btn btn-outline-secondary mb-1 " onclick="this.form.submit()" style=" hight: 30px;">Удалить</button>
+                            <button hidden type="button" class="btn btn-outline-secondary mb-1" style=" hight: 30px;">Изменить</button>
+                            <input type="hidden" name="id" value="{{ new.id }}">
+                        </form>
                     </div>
                 </div>
                 {% else %}

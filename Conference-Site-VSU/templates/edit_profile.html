@@ -14,7 +14,8 @@
 
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
                 <div class="card col-md-8 mb-1" align="auto" style="margin: auto; border: none;">
-
+                <form action="" method="post">
+                    {{ form.hidden_tag() }}
                     <p>Email:{{ form.email(class_='form-control', placeholder='Email', id='exampleInputEmail1', style='outline : none; resize : none;') }}</p>
                     <p>Имя:{{ form.first_name(class_='form-control', placeholder='Имя', style='outline : none; resize : none;') }}</p>
                     <p>Фамилия:{{ form.second_name(class_='form-control', placeholder='Фамилия', style='outline : none; resize : none;') }}</p>
@@ -23,6 +24,7 @@
                         <a class="col" style="margin: auto;">{{ form.submit(class_='btn btn-outline-primary') }}</a>
                         <a class="col"  href="{{ url_for('change_password') }}" style="margin: auto;">Изменить пароль</a>
                     </div>
+                </form>
                 </div>
             </div>
         </div>

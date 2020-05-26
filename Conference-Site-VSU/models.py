@@ -1,7 +1,6 @@
 import os
 from _md5 import md5
 from datetime import datetime
-
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
 
@@ -74,10 +73,12 @@ class File(db.Model):
     def download(self):
         return googledrive.download_file(self.name, self.drive_file_id)
 
-    def upload(file):
+    def upload(file, image=False, fileimage=None):
         savepath = os.path.join(UPLOAD_DIR, file.filename)
         file.save(savepath)
         drive_id_file = googledrive.upload_file(current_user.drive_folder_id, UPLOAD_DIR, file.filename)
+        if image:
+            fileimage.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'images', 'volume', drive_id_file + '.jpg'))
         os.remove(savepath)
         return File(name=file.filename, owner=current_user.id, drive_file_id=drive_id_file)
 

@@ -13,9 +13,14 @@
 
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
                 <div class="row">
+                    <form action="" enctype="multipart/form-data" method="post">
+                        {{form.hidden_tag()}}
                         <p class="col">{{ form.name(class_='form-control', id="inputDefault", style='outline : none; resize : none;') }}</p>
                         <p class="col">{{ form.file(class_='form-control-file', style='outline : none;') }}</p>
+                        <p class="col">{{ form.ico(class_='form-control-file', style='outline : none;') }}</p>
                         <a class="col">{{ form.submit(class_='btn btn-outline-primary') }}</a>
+                    </form>
+                    <!--{{ wtf.quick_form(form) }}-->
                 </div>
             </div>
         </div>

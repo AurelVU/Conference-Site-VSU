@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% import '/bootstrap/wtf.html' as wtf %}
 {% block content %}
 <script defer type="text/javascript" src="/Conference-Site-VSU/static/js/card-person.js"></script>
 <div class="row">
@@ -72,13 +72,13 @@
 							{'image':'../static/images/volume/Cover_12.png', 'title': 'Работы студентов', 'text': 'Выпуск 12 (2017)', 'drive':'https://drive.google.com/open?id=12tYw_2HrdWXO9Ncpbdke5cCv7sEuB3bO'},
 							{'image':'../static/images/volume/Cover_11.png', 'title': 'Работы студентов', 'text': 'Выпуск 11 (2016)', 'drive':'https://drive.google.com/open?id=1F7ELS2NhtiQamfmRCyjojIXL-cyA4hVH'}
 							] %}
-							{% for new in news %}
+							{% for new in compitarions %}
 							<div class="card col-md-4 col-sm-8 mb-1"  >
 								<div class="card-body" style="display: block; margin: center; padding:10px;">
-									<img class="card-img-top img-fluid rounded mb-2" style="width: 10rem;" src="{{new.image}}" alt="Card image cap">
-									<h5 class="card-title">{{new.title}}</h5>
-									<p class="card-text">{{new.text}}</p>
-									<a href="{{new.drive}}" class="btn btn-primary">Скачать</a>
+									<img class="card-img-top img-fluid rounded mb-2" style="width: 10rem;" src="{{ url_for('static', filename='images/volume/' + files[new].drive_file_id + '.jpg') }}" alt="Card image cap">
+									<h5 class="card-title">{{new.name}}</h5>
+									<!--<p class="card-text">{{new.text}}</p>-->
+									<a href="{{ url_for('download_file', file_id=files[new].drive_file_id) }}" class="btn btn-primary">Скачать</a>
 								</div>
 							</div>
 							{% endfor %}

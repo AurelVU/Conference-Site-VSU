@@ -15,11 +15,15 @@
                         <button type="button" onclick="history.back();"  class="btn btn-outline-secondary" style="width: 100px; hight: 30px; padding:1%">Назад</button>
                     </div>
                     <div class="col-md-8">
-                        <p>{{ form.name(class_='form-control', style='min-width: 5rem', placeholder='Название вашей статьи' ) }}</p>
+                        <form action="" enctype="multipart/form-data" method="POST">
+                        {{form.hidden_tag()}}
+                            <p>{{ form.name(class_='form-control', style='min-width: 5rem', placeholder='Название вашей статьи' ) }}</p>
                         <div class="row">
                             <p class="col">{{ form.file(class_='form-control-file', style='outline : none;') }}</p>
                             <a class="col-md-3">{{ form.submit(class_='btn btn-outline-primary  pull-right') }}</a>
                         </div>
+                        </form>
+                        <!--{{ wtf.quick_form(form) }}-->
                     </div>
                 </div>
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
