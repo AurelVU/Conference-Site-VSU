@@ -429,11 +429,12 @@ def users():
     else:
         users = User.query.all()
     roles = models.Role.query.all()
+    rr = {i.id: (i.id, i.name) for i in roles}
     current_role = [(i.id, i.name) for i in roles]
     ChangeUser.setRoles(current_role)
-    form = ChangeUser()
-    rolesss = {}
 
+    rolesss = {}
+    forms = {}
     blockss = dict()
     for u in users:
         blockss[u.id] = dict()
@@ -446,6 +447,10 @@ def users():
             blockss[u.id]['bm'] = False
             blockss[u.id]['ba'] = False
             blockss[u.id]['bf'] = False
+        form = ChangeUser(id=u.id, role=u.role)
+        #form.id.data = u.id
+        #form.role.default = u.role
+        forms[u.id] = form
     for r in roles: #2 - admin, 1 - user, 3 - changer
         rolesss[r.id] = r.name
     if form.submit.data:
@@ -455,7 +460,7 @@ def users():
             User.query.filter_by(id=id_user).update({'role': role})
             db.session.commit()
 
-    return render_template('users.html', title='Смена роли', users=users,blocks=blockss, form=form, roles=rolesss)
+    return render_template('users.html', title='Смена роли', users=users, blocks=blockss, forms=forms, roles=rolesss)
 
 if __name__ == '__main__':
     socketio.run(application)

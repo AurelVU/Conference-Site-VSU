@@ -83,3 +83,9 @@ class AddCompilation(FlaskForm):
     ico = FileField(validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png'],
                     'Только "jpg", "jpeg" и "png" файлы поддерживаются')])
     submit = SubmitField('Отправить')
+
+class ChangeArticleStatus(FlaskForm):
+    def setStatuses(statuses):
+        ChangeArticleStatus.stat = SelectField('Статус', validators=[DataRequired()], choices=statuses)
+        ChangeArticleStatus.submit = SubmitField('Отправить')
+        ChangeArticleStatus.id = HiddenField('id')

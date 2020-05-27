@@ -57,10 +57,11 @@
                         </th>
                         <th scope="row">
                            <form action="" method="post">
-                               {{form.hidden_tag()}}
-                                <input type="hidden" name="id" value="{{ user.id }}">
-                                <p>{{ form.role(class_='form-control') }}</p>
-                                <a>{{ form.submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
+                               <!--{{ forms[user.id].id(value=user.id) }}-->
+                                <!--<input type="hidden" name="id" value="{{ user.id }}">-->
+                                <p>{{ forms[user.id].role(class_='form-control') }}</p>
+                                <a>{{ forms[user.id].submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
+                               {{forms[user.id].hidden_tag()}}
                            </form>
                         </th>
                     </tr>
