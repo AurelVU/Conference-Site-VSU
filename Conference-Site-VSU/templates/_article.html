@@ -9,17 +9,30 @@
             <div class="col">
                 <p>Автор: {{ article.owner }}</p>
                 <a href="{{ url_for('download_file', file_id=article.file.drive_file_id) }}">Скачать</a>
+
+            </div>
+            <div class="col">
+                {% if current_user.id == article.owner_id %}
+                        <form action="update_article" enctype="multipart/form-data" method="post">
+                            <p>Обновить файл вашей статьи: </p>
+                            <p>{{ updform.id(value=article.id) }}</p>
+                            <p>{{ updform.file(class_='form-control-file', style='outline : none;') }}</p>
+                            <p>{{ updform.submit(class_='btn btn-outline-primary  pull-right') }}</p>
+                            <p>{{ updform.csrf_token }}</p>
+                        </form>
+                {% endif %}
             </div>
             <div class="col-md-5">
                 <p class="card-text"><small class="text-muted">Time: {{ article.timestamp }}</small></p>
                      {% if current_user.role == 2 or current_user.role == 3 %}
-                    <form action="" method="post">
-                        <p>{{ forms[user.id].stat(class_='form-control') }}</p>
-                        <a>{{ forms[user.id].submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
-                        {{forms[user.id].hidden_tag()}}
+                    <form action="change_stat" method="post">
+                        <p>{{ forms[article.id].stat(class_='form-control') }}</p>
+                        <a>{{ forms[article.id].submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
+                        {{forms[article.id].hidden_tag()}}
                     </form>
                     {% else %}
-                    <div class="alert alert-dismissible alert-info" style="height: 3rem;">
+
+                     <div class="alert alert-dismissible alert-{%if forms[article.id].stat_id == 3%}success{%elif forms[article.id].stat_id == 2%}danger{%else%}info{%endif%}" style="height: 3rem;">
                         <p>{{ article.stat }}</p>
                     </div>
                     {% endif %}

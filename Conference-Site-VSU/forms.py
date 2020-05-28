@@ -89,3 +89,9 @@ class ChangeArticleStatus(FlaskForm):
         ChangeArticleStatus.stat = SelectField('Статус', validators=[DataRequired()], choices=statuses)
         ChangeArticleStatus.submit = SubmitField('Отправить')
         ChangeArticleStatus.id = HiddenField('id')
+
+
+class UpdateArticle(FlaskForm):
+    id = HiddenField('id')
+    file = FileField(validators=[DataRequired(), FileRequired(), FileAllowed(['pdf', 'docx', 'rtx'], 'Только документы формата pdf, docx, rtx')])
+    submit = SubmitField('Отправить')

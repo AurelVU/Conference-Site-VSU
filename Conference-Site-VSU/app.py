@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from datetime import datetime, timedelta
 from operator import attrgetter
 
 from config import UPLOAD_DIR
@@ -159,6 +160,25 @@ def add_compilation():
             return render_template('add_compilation.html', form=form)
     return 'Ошибка доступа'
 
+
+@application.route('/change_stat', methods=['POST'])
+@login_required
+def change_stat():
+    statuses = models.Status.query.all()
+    st = [(i.id, i.name) for i in statuses]
+    ChangeArticleStatus.setStatuses(st)
+    form = ChangeArticleStatus()
+    if current_user.id == 2 or current_user.id == 3:
+        if form.submit.data:
+            id_art = int(form.id.data)
+            stat = int(form.stat.data[0])
+            models.Article.query.filter_by(id=id_art).update({'stat': stat})
+            db.session.commit()
+            return '<script>document.location.href = document.referrer</script>'
+
+
+
+
 @application.route('/add_news', methods=['GET', 'POST'])
 @login_required
 def add_news():
@@ -179,7 +199,13 @@ def add_news():
 @application.route('/article', methods=['GET', 'POST'])
 @login_required
 def article():
+    updform = UpdateArticle()
     form = UploadArticle()
+    fromDate = datetime.now() - timedelta(days=365)
+    na_rass = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=1).count()
+    otclon = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=2).count()
+    prin = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=3).count()
+    alll = models.Article.query.filter(models.Article.timestamp >= fromDate).count()
     if form.submit.data:
         block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
         if (block is None) or not (block.block_article):
@@ -200,23 +226,41 @@ def article():
     else:
         articles = models.Article.query.join(models.File, (models.File.id == models.Article.file)).all()
         files = models.File.query.filter(models.File.owner == current_user.id).all()
+        statuses = models.Status.query.all()
+        st = [(i.id, i.name) for i in statuses]
+        ChangeArticleStatus.setStatuses(st)
+        forms = {}
         articlesss = []
         st = models.Status.query.all()
         statuses = {}
         for s in st:
             statuses[s.id] = s.name
         for art in articles:
+            forms[art.id] = ChangeArticleStatus(id=art.id, stat=art.stat)
             for f in files:
                 if art.file == f.id:
-                    articlesss.append({'article': art, 'file': f, 'owner' : current_user.username, 'stat' : statuses[art.stat] })
+                    articlesss.append({'article': art, 'file': f, 'owner' : current_user.username, 'owner_id' : current_user.id, 'id':art.id, 'stat_id': art.stat, 'stat':statuses[art.stat], 'timestamp' : art.timestamp.strftime("%d.%m.%Y %H:%M:%S") })
 
-        return render_template('articles.html', form=form, articles=articlesss)
+        return render_template('articles.html', form=form, updform=updform, forms=forms, na_rass=na_rass ,otclon=otclon, prin=prin, all=alll,  articles=articlesss)
 
 
 @application.route('/articles', methods=['GET', 'POST'])
 @login_required
 def articles():
     if current_user.role == 2 or current_user.role == 3:
+        updform = UpdateArticle()
+        fromDate = datetime.now() - timedelta(days=365)
+        na_rass = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=1).count()
+        otclon = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=2).count()
+        prin = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=3).count()
+        alll = models.Article.query.filter(models.Article.timestamp >= fromDate).count()
+        forms={}
+        all = {}
+        users = User.query.all()
+        us = {i.id: i for i in users}
+        statuses = models.Status.query.all()
+        st = [(i.id, i.name) for i in statuses]
+        ChangeArticleStatus.setStatuses(st)
         articles = models.Article.query.all()
         files = models.File.query.all()
         articlesss = []
@@ -225,11 +269,12 @@ def articles():
         for s in st:
             statuses[s.id] = s.name
         for art in articles:
+            forms[art.id] = ChangeArticleStatus(id=art.id, stat=art.stat)
             for f in files:
                 if art.file == f.id:
-                    articlesss.append({'article': art, 'file': f, 'owner' : current_user.username, 'stat' : statuses[art.stat], 'timestamp' : art.timestamp.strftime("%d.%m.%Y %H:%M:%S") })
+                    articlesss.append({'article': art, 'file': f, 'owner' : us[f.owner].username, 'owner_id' : us[f.owner].id, 'id':art.id, 'stat_id': art.stat, 'stat':statuses[art.stat], 'timestamp' : art.timestamp.strftime("%d.%m.%Y %H:%M:%S") })
 
-        return render_template('all_articles.html', form=form, articles=articlesss)
+        return render_template('all_articles.html', form=form, updform=updform, forms=forms, na_rass=na_rass ,otclon=otclon, prin=prin, all=alll, articles=articlesss)
     else:
         return 'Ошибка доступа'
 
@@ -329,6 +374,22 @@ def change_password():
     return render_template('change_password.html', title='Change Password',
                            form=form)
 
+@application.route('/update_article', methods=['POST'])
+@login_required
+def update_article():
+    form = UpdateArticle()
+    block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
+    if block is not None and (block.block_file):
+        return 'Блокировка загрузки файлов'
+    id = form.id.data
+    current_file = form.file.data
+    file = models.File.upload(current_file)
+    db.session.add(file)
+    idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
+    article = models.Article.query.filter_by(id=id).first()
+    article.file = idfile.id
+    db.session.commit()
+    return '<script>document.location.href = document.referrer</script>'
 
 @application.route('/send_message', methods=['GET', 'POST'])
 @login_required
@@ -429,7 +490,6 @@ def users():
     else:
         users = User.query.all()
     roles = models.Role.query.all()
-    rr = {i.id: (i.id, i.name) for i in roles}
     current_role = [(i.id, i.name) for i in roles]
     ChangeUser.setRoles(current_role)
 
