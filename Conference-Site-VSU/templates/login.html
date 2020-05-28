@@ -10,17 +10,19 @@
             <div class="card-body" style="margin-left:70px; margin-right: 70px">
                 <h3>Войти</h3>
                 <div class="card bg-dark mb-4" style="hight: 1px"></div>
-                    <div class="card" align="auto" style="margin: auto; border: none;">
-                        {{ wtf.quick_form(form) }}
+                <form action="" method="post">
+                    <div class="card" align="auto" style="margin: auto; border: none; max-width: 20rem;">
+                        {{ form.hidden_tag() }}
+
+                        <p>{{ form.username(class_='form-control', placeholder='Логин', style='outline : none; resize : none;') }}</p>
+                        <p>{{ form.password(class_='form-control',  placeholder='Пароль', style='outline : none; resize : none;') }}</p>
+                        <p>{{ form.remember_me() }} {{ form.remember_me.label() }}</p>
+                        <a style="margin: auto;">{{ form.submit(class_='btn btn-outline-primary') }}</a>
                     </div>
+                </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-<!--<p>{{ form.username(class_='form-control', placeholder='Логин', style='outline : none; resize : none;') }}</p>
-                         <p>{{ form.password(class_='form-control',  placeholder='Пароль', style='outline : none; resize : none;') }}</p>
-                         <p>{{ form.remember_me() }}</p>
-                         <a style="margin: auto;">{{ form.submit(class_='btn btn-outline-primary') }}</a>
-                         -->

@@ -3,9 +3,27 @@
         <h5 class="card-title">Название: {{ article.article.name }}</h5>
     </div>
     <div class="card-body">
-        <p>Статус: {{ article.stat }}</p>
-        <p>Автор: {{ article.owner }}</p>
-        <a href="{{ url_for('download_file', file_id=article.file.drive_file_id) }}">Скачать</a>
-        <p class="card-text"><small class="text-muted">{{ article.timestamp }}</small></p>
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col">
+                <p>Автор: {{ article.owner }}</p>
+                <a href="{{ url_for('download_file', file_id=article.file.drive_file_id) }}">Скачать</a>
+            </div>
+            <div class="col-md-5">
+                <p class="card-text"><small class="text-muted">Time: {{ article.timestamp }}</small></p>
+                     {% if current_user.role == 2 or current_user.role == 3 %}
+                    <form action="" method="post">
+                        <p>{{ forms[user.id].stat(class_='form-control') }}</p>
+                        <a>{{ forms[user.id].submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
+                        {{forms[user.id].hidden_tag()}}
+                    </form>
+                    {% else %}
+                    <div class="alert alert-dismissible alert-info" style="height: 3rem;">
+                        <p>{{ article.stat }}</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
     </div>
 </div>

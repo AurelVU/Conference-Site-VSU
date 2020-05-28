@@ -455,7 +455,7 @@ def users():
         rolesss[r.id] = r.name
     if form.submit.data:
         if current_user.role == 2:
-            id_user = int(form.id.data)
+            id_user = int(form.user_id.data)
             role = int(form.role.data[0])
             User.query.filter_by(id=id_user).update({'role': role})
             db.session.commit()

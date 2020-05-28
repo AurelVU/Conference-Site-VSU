@@ -69,7 +69,7 @@ class ChangeUser(FlaskForm):
     def setRoles(roles):
         ChangeUser.role = SelectField('Роль', validators=[DataRequired()], choices=roles)
         ChangeUser.submit = SubmitField('Отправить')
-        ChangeUser.id = HiddenField('id')
+        ChangeUser.user_id = HiddenField('id')
 
 
 class AddNews(FlaskForm):
