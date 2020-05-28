@@ -4,12 +4,10 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col">
-            </div>
-            <div class="col">
+            <div class="col-md-2.5">
+                <img src="/static/images/document.png" class="card-img img-fluid mb-2" alt="..." style="width: 3rem;">
                 <p>Автор: {{ article.owner }}</p>
                 <a href="{{ url_for('download_file', file_id=article.file.drive_file_id) }}">Скачать</a>
-
             </div>
             <div class="col">
                 {% if current_user.id == article.owner_id %}
@@ -17,23 +15,29 @@
                             <p>Обновить файл вашей статьи: </p>
                             <p>{{ updform.id(value=article.id) }}</p>
                             <p>{{ updform.file(class_='form-control-file', style='outline : none;') }}</p>
-                            <p>{{ updform.submit(class_='btn btn-outline-primary  pull-right') }}</p>
+                            <p>{{ updform.submit(class_='btn btn-outline-primary', style='width:100px; padding:0;') }}</p>
                             <p>{{ updform.csrf_token }}</p>
                         </form>
                 {% endif %}
             </div>
-            <div class="col-md-5">
-                <p class="card-text"><small class="text-muted">Time: {{ article.timestamp }}</small></p>
+            <div class="col-md-4.3">
+                <p class="card-text"><small class="text-muted">Время: {{ article.timestamp }}</small></p>
                      {% if current_user.role == 2 or current_user.role == 3 %}
                     <form action="change_stat" method="post">
-                        <p>{{ forms[article.id].stat(class_='form-control') }}</p>
-                        <a>{{ forms[article.id].submit(class_='btn btn-outline-secondary pull-right', style='padding: 2%') }}</a>
+                        {% if forms[article.id].stat.data == '3' %}
+                            <p>{{ forms[article.id].stat(class_='form-control', style='background-color:#c3f0ad') }}</p>
+                        {% elif forms[article.id].stat.data == '2' %}
+                            <p>{{ forms[article.id].stat(class_='form-control', style='background-color:#f7a088') }}</p>
+                        {% else %}
+                            <p>{{ forms[article.id].stat(class_='form-control', style='background-color:#c4f8ff') }}</p>
+                        {% endif %}
+                        <a>{{ forms[article.id].submit(class_='btn btn-outline-secondary pull-right', style='width: 100px; padding:0;') }}</a>
                         {{forms[article.id].hidden_tag()}}
                     </form>
                     {% else %}
 
-                     <div class="alert alert-dismissible alert-{%if forms[article.id].stat_id == 3%}success{%elif forms[article.id].stat_id == 2%}danger{%else%}info{%endif%}" style="height: 3rem;">
-                        <p>{{ article.stat }}</p>
+                     <div class="alert alert-dismissible alert-{%if forms[article.id].stat_id == 3%}success{%elif forms[article.id].stat_id == 2%}danger{%else%}info{%endif%}">
+                        <p style="margin:auto" align="center">{{ article.stat }}</p>
                     </div>
                     {% endif %}
             </div>
