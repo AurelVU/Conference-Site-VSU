@@ -387,6 +387,7 @@ def update_article():
     db.session.add(file)
     idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
     article = models.Article.query.filter_by(id=id).first()
+    article.stat = 1
     article.file = idfile.id
     db.session.commit()
     return '<script>document.location.href = document.referrer</script>'
@@ -524,5 +525,4 @@ def users():
 
 if __name__ == '__main__':
     socketio.run(application)
-    application.run()
 
