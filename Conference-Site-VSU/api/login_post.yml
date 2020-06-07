@@ -1,0 +1,35 @@
+Логин
+Call fgdlgkdflgkdflk;this api passing a language name and get back its features
+---
+tags:
+  - Awesomeness Language API
+parameters:
+  - name: username
+    in: formData
+    description: username
+    required: true
+    type: string
+  - name: password
+    in: formData
+    description: password
+    required: true
+    type: string
+    format: password
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true
+  - name: remember_me
+    in: formData
+    required: true
+    type: boolean
+    default: true
+responses:
+  200:
+    description: html страница
+
+    content:
+        html страница

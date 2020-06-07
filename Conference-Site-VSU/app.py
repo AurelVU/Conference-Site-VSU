@@ -10,24 +10,11 @@ from flask import render_template, redirect, url_for, flash, request, send_from_
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required, current_user
 
-from flasgger import Swagger
+from flasgger import Swagger, swag_from
 
 from init import application, db, socketio
 
-
-
-swagger_template = {
-    # Other settings
-
-    'securityDefinitions': {
-        'basicAuth': {
-            'type': 'basic'
-        }
-    },
-
-    # Other settings
-}
-Swagger(application,  template=swagger_template)
+Swagger(application)
 import events
 
 import models
@@ -47,18 +34,17 @@ import googledrive
 @application.route('/index')
 def index():
     """
-            Получение главной страницы
-            Call this api passing a language name and get back its features
-            ---
-            tags:
-              - Awesomeness Language API
-            responses:
-              200:
-                description: html страница
-                content:
-                    html страница
-
-            """
+        Получение главной страницы
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            content:
+                html страница
+    """
     _news = models.New.query.order_by(models.New.timestamp.desc()).limit(3).all()
     news = []
     for n in _news:
@@ -105,7 +91,7 @@ def download():
         file = models.File.query.filter_by(id=c.file).first()
         files[c] = file
     return render_template("download.html",
-                           title = 'Архив', compitarions=compitarions, files=files ,download='active')
+                           title='Архив', compitarions=compitarions, files=files ,download='active')
 
 
 
@@ -141,16 +127,23 @@ def delete_news():
         ---
         tags:
           - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
+        parameters:
               - name: "id"
                 in: "delete_news"
                 description: "ID новости"
                 required: true
                 type: "integer"
                 format: "int64"
+              - name: submit
+                in: formData
+                description: username
+                required: true
+                type: boolean
+                enum:
+                  - true
+        responses:
+          200:
+            description: html страница
             content:
                 html страница
 
@@ -167,31 +160,13 @@ def paper():
                            title = 'Сборник', paper='active')
 
 @application.route('/login', methods=['GET', 'POST'])
+@swag_from('api/login_get.yml', methods=['GET'])
+@swag_from('api/login_post.yml', methods=['POST'])
 def login():
-    """
-            Логин
-            Call this api passing a language name and get back its features
-            ---
-            tags:
-              - Awesomeness Language API
-            responses:
-              200:
-                description: html страница
-                parameters:
-                  - name: "id"
-                    in: "delete_news"
-                    description: "ID новости"
-                    required: true
-                    type: "integer"
-                    format: "int64"
-                content:
-                    html страница
-
-    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         user = models.User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Неправильный логин или пароль')
@@ -227,30 +202,12 @@ def logout():
 
 @application.route('/add_compilation', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/add_compilation_get.yml', methods=['GET'])
+@swag_from('api/add_compilation_post.yml', methods=['POST'])
 def add_compilation():
-    """
-                Добавить сборник
-                Call this api passing a language name and get back its features
-                ---
-                tags:
-                  - Awesomeness Language API
-                responses:
-                  200:
-                    description: html страница
-                    parameters:
-                      - name: "id"
-                        in: "delete_news"
-                        description: "ID новости"
-                        required: true
-                        type: "integer"
-                        format: "int64"
-                    content:
-                        html страница
-
-        """
     form = AddCompilation()
     if current_user.role == 2:
-        if form.validate_on_submit():
+        if form.is_submitted():
             name = form.name.data
             current_file = form.file.data
             image = form.ico.data
@@ -274,25 +231,24 @@ def add_compilation():
 @login_required
 def change_stat():
     """
-                Сменить статус статьи
-                Call this api passing a language name and get back its features
-                ---
-                tags:
-                  - Awesomeness Language API
-                responses:
-                  200:
-                    description: html страница
-                    parameters:
-                      - name: "id"
-                        in: "delete_news"
-                        description: "ID новости"
-                        required: true
-                        type: "integer"
-                        format: "int64"
-                    content:
-                        html страница
-
-        """
+        Сменить статус статьи
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+    """
     statuses = models.Status.query.all()
     st = [(i.id, i.name) for i in statuses]
     ChangeArticleStatus.setStatuses(st)
@@ -312,28 +268,27 @@ def change_stat():
 @login_required
 def add_news():
     """
-        Добавить новость
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-
-        """
+    Добавить новость
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+    """
     form = AddNews()
     if current_user.role == 2:
-        if form.validate_on_submit():
+        if form.is_submitted():
             title = form.title.data
             text = form.text.data
             new = models.New(text=text, title=title)
@@ -347,27 +302,9 @@ def add_news():
 
 @application.route('/article', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/article_get.yml', methods=['GET'])
+@swag_from('api/article_post.yml', methods=['POST'])
 def article():
-    """
-        Статьи пользователей
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-
-        """
     updform = UpdateArticle()
     form = UploadArticle()
     fromDate = datetime.now() - timedelta(days=365)
@@ -415,27 +352,9 @@ def article():
 
 @application.route('/articles', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/articles_get.yml', methods=['GET'])
+@swag_from('api/articles_post.yml', methods=['POST'])
 def articles():
-    """
-        Все статьи
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-
-        """
     if current_user.role == 2 or current_user.role == 3:
         updform = UpdateArticle()
         fromDate = datetime.now() - timedelta(days=365)
@@ -478,16 +397,17 @@ def user(username):
         ---
         tags:
           - Awesomeness Language API
+        parameters:
+          - in: path
+            name: "username"
+            schema:
+            type: string
+            required: true
+            description: username пользователя
         responses:
           200:
             description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
+
             content:
                 html страница
 
@@ -520,30 +440,13 @@ def user(username):
     return render_template('user.html', user=user, posts=posts)
 
 @application.route('/register', methods=['GET', 'POST'])
+@swag_from('api/register_get.yml', methods=['GET'])
+@swag_from('api/register_post.yml', methods=['POST'])
 def register():
-    """
-        Страница регистрации
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegisterForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         folderid = googledrive.create_new_folder('1y1k_hrwlXcEIJzfpfMv9APl2mAdYUYF6', form.username.data)
         user = User(username=form.username.data, email=form.email.data, role=1, drive_folder_id=folderid,
                     first_name=form.first_name.data, last_name=form.second_name.data)
@@ -586,29 +489,11 @@ def download_file(file_id):
 
 @application.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/edit_profile_get.yml', methods=['GET'])
+@swag_from('api/edit_profile_post.yml', methods=['POST'])
 def edit_profile():
-    """
-        Изменить профиль
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-
-        """
     form = EditProfileForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         current_user.about_me = form.about_me.data
         current_user.email = form.email.data
         current_user.first_name = form.first_name.data
@@ -626,29 +511,11 @@ def edit_profile():
 
 @application.route('/change_password', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/change_password_get.yml', methods=['GET'])
+@swag_from('api/change_password_post.yml', methods=['POST'])
 def change_password():
-    """
-    Изменить пароль
-    Call this api passing a language name and get back its features
-    ---
-    tags:
-      - Awesomeness Language API
-    responses:
-      200:
-        description: html страница
-        parameters:
-          - name: "id"
-            in: "delete_news"
-            description: "ID новости"
-            required: true
-            type: "integer"
-            format: "int64"
-        content:
-            html страница
-
-    """
     form = EditPasswordForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         if current_user.check_password(form.old_password.data):
             current_user.set_password(form.password.data)
             db.session.commit()
@@ -668,8 +535,6 @@ def update_article():
         ---
         tags:
           - Awesomeness Language API
-        security:
-           - basicAuth
         responses:
           200:
             description: html страница
@@ -829,27 +694,9 @@ def change_role():
 
 @application.route('/users', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/users_get.yml', methods=['GET'])
+@swag_from('api/users_post.yml', methods=['POST'])
 def users():
-    """
-        Список пользователей
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
-
-        """
     users = []
     if request.args.get('search'):
         string = request.args['search']

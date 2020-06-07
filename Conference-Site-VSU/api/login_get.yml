@@ -1,0 +1,11 @@
+Логин
+Call this api passing dgvdfgdfgdfgdfgsdfgsdfa language name and get back its features
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: html страница
+
+    content:
+        html страница

@@ -1,0 +1,17 @@
+Изменить профиль
+Call this api passing a language name and get back its features
+---
+tags:
+  - Awesomeness Language API
+responses:
+  200:
+    description: html страница
+    parameters:
+      - name: "id"
+        in: "delete_news"
+        description: "ID новости"
+        required: true
+        type: "integer"
+        format: "int64"
+    content:
+        html страница
