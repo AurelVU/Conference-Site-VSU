@@ -14,3 +14,4 @@ db = SQLAlchemy(application)
 migrate = Migrate(application, db)
 socketio = SocketIO()
 socketio.init_app(application)
+

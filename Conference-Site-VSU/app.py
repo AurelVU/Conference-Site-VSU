@@ -5,7 +5,7 @@ from operator import attrgetter
 
 from config import UPLOAD_DIR
 
-import events
+
 from flask import render_template, redirect, url_for, flash, request, send_from_directory, session
 from flask_bootstrap import Bootstrap
 from flask_login import login_user, logout_user, login_required, current_user
@@ -14,8 +14,21 @@ from flasgger import Swagger
 
 from init import application, db, socketio
 
-Swagger(application)
 
+
+swagger_template = {
+    # Other settings
+
+    'securityDefinitions': {
+        'basicAuth': {
+            'type': 'basic'
+        }
+    },
+
+    # Other settings
+}
+Swagger(application,  template=swagger_template)
+import events
 
 import models
 from forms import *
@@ -33,6 +46,19 @@ import googledrive
 @application.route('/')
 @application.route('/index')
 def index():
+    """
+            Получение главной страницы
+            Call this api passing a language name and get back its features
+            ---
+            tags:
+              - Awesomeness Language API
+            responses:
+              200:
+                description: html страница
+                content:
+                    html страница
+
+            """
     _news = models.New.query.order_by(models.New.timestamp.desc()).limit(3).all()
     news = []
     for n in _news:
@@ -42,11 +68,37 @@ def index():
 
 @application.route('/contact')
 def contact():
+    """
+        Получение контактной информации
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            content:
+                html страница
+
+    """
     return render_template("contact.html",
                            title = 'Контакты', contact='active')
 
 @application.route('/download')
 def download():
+    """
+        Получение списка сборников
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            content:
+                html страница
+
+        """
     compitarions = models.Compilation.query.all()
     files = {}
     for c in compitarions:
@@ -60,6 +112,19 @@ def download():
 
 @application.route('/news')
 def news():
+    """
+    Получение актуальных новостей
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        content:
+            html страница
+
+    """
     _news = models.New.query.order_by(models.New.timestamp.desc()).all()
     news = []
     for n in _news:
@@ -70,6 +135,26 @@ def news():
 @application.route('/delete_news', methods=['POST'])
 @login_required
 def delete_news():
+    """
+        Удаление новостей
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     if current_user.id == 2:
         id = request.form['id']
         models.New.query.filter_by(id=id).delete()
@@ -83,6 +168,26 @@ def paper():
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+            Логин
+            Call this api passing a language name and get back its features
+            ---
+            tags:
+              - Awesomeness Language API
+            responses:
+              200:
+                description: html страница
+                parameters:
+                  - name: "id"
+                    in: "delete_news"
+                    description: "ID новости"
+                    required: true
+                    type: "integer"
+                    format: "int64"
+                content:
+                    html страница
+
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -98,47 +203,51 @@ def login():
 @application.route('/logout')
 def logout():
     """
-        This is the language awesomeness API
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        parameters:
-          - name: language
-            in: path
-            type: string
-            required: true
-            description: The language name
-          - name: size
-            in: query
-            type: integer
-            description: size of awesomeness
-        responses:
-          500:
-            description: Error The language is not awesome!
-          200:
-            description: A language with its awesomeness
-            schema:
-              id: awesome
-              properties:
-                language:
-                  type: string
-                  description: The language name
-                  default: Lua
-                features:
-                  type: array
-                  description: The awesomeness list
-                  items:
-                    type: string
-                  default: ["perfect", "simple", "lovely"]
+            Выход
+            Call this api passing a language name and get back its features
+            ---
+            tags:
+              - Awesomeness Language API
+            responses:
+              200:
+                description: html страница
+                parameters:
+                  - name: "id"
+                    in: "delete_news"
+                    description: "ID новости"
+                    required: true
+                    type: "integer"
+                    format: "int64"
+                content:
+                    html страница
 
-        """
+    """
     logout_user()
     return redirect(url_for('index'))
 
 @application.route('/add_compilation', methods=['GET', 'POST'])
 @login_required
 def add_compilation():
+    """
+                Добавить сборник
+                Call this api passing a language name and get back its features
+                ---
+                tags:
+                  - Awesomeness Language API
+                responses:
+                  200:
+                    description: html страница
+                    parameters:
+                      - name: "id"
+                        in: "delete_news"
+                        description: "ID новости"
+                        required: true
+                        type: "integer"
+                        format: "int64"
+                    content:
+                        html страница
+
+        """
     form = AddCompilation()
     if current_user.role == 2:
         if form.validate_on_submit():
@@ -164,14 +273,34 @@ def add_compilation():
 @application.route('/change_stat', methods=['POST'])
 @login_required
 def change_stat():
+    """
+                Сменить статус статьи
+                Call this api passing a language name and get back its features
+                ---
+                tags:
+                  - Awesomeness Language API
+                responses:
+                  200:
+                    description: html страница
+                    parameters:
+                      - name: "id"
+                        in: "delete_news"
+                        description: "ID новости"
+                        required: true
+                        type: "integer"
+                        format: "int64"
+                    content:
+                        html страница
+
+        """
     statuses = models.Status.query.all()
     st = [(i.id, i.name) for i in statuses]
     ChangeArticleStatus.setStatuses(st)
     form = ChangeArticleStatus()
-    if current_user.id == 2 or current_user.id == 3:
+    if current_user.role == 2 or current_user.role == 3:
         if form.submit.data:
             id_art = int(form.id.data)
-            stat = int(form.stat.data[0])
+            stat = int(form.stat.data)
             models.Article.query.filter_by(id=id_art).update({'stat': stat})
             db.session.commit()
             return '<script>document.location.href = document.referrer</script>'
@@ -182,6 +311,26 @@ def change_stat():
 @application.route('/add_news', methods=['GET', 'POST'])
 @login_required
 def add_news():
+    """
+        Добавить новость
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     form = AddNews()
     if current_user.role == 2:
         if form.validate_on_submit():
@@ -199,6 +348,26 @@ def add_news():
 @application.route('/article', methods=['GET', 'POST'])
 @login_required
 def article():
+    """
+        Статьи пользователей
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     updform = UpdateArticle()
     form = UploadArticle()
     fromDate = datetime.now() - timedelta(days=365)
@@ -247,6 +416,26 @@ def article():
 @application.route('/articles', methods=['GET', 'POST'])
 @login_required
 def articles():
+    """
+        Все статьи
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     if current_user.role == 2 or current_user.role == 3:
         updform = UpdateArticle()
         fromDate = datetime.now() - timedelta(days=365)
@@ -257,7 +446,9 @@ def articles():
         forms={}
         all = {}
         users = User.query.all()
-        us = {i.id: i for i in users}
+        us = {}
+        for i in users:
+            us[i.id] = i
         statuses = models.Status.query.all()
         st = [(i.id, i.name) for i in statuses]
         ChangeArticleStatus.setStatuses(st)
@@ -281,6 +472,26 @@ def articles():
 @application.route('/user/<username>')
 @login_required
 def user(username):
+    """
+        Страница пользователя
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     user = User.query.filter_by(username=username).first_or_404()
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
@@ -310,6 +521,25 @@ def user(username):
 
 @application.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+        Страница регистрации
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+    """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegisterForm()
@@ -328,20 +558,55 @@ def register():
 
 @application.route('/download_file/<file_id>')
 def download_file(file_id):
+    """
+    Скачать файл
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     remove_folder_contents(UPLOAD_DIR)
     fl = models.File.query.filter_by(drive_file_id=file_id).first_or_404()
     file_path = fl.download()
-
-    def generate():
-        with open(file_path) as f:
-            yield from f
-        os.remove(file_path)
 
     return send_from_directory(directory=UPLOAD_DIR, filename=fl.name)
 
 @application.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    """
+        Изменить профиль
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     form = EditProfileForm()
     if form.validate_on_submit():
         current_user.about_me = form.about_me.data
@@ -362,6 +627,26 @@ def edit_profile():
 @application.route('/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    """
+    Изменить пароль
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     form = EditPasswordForm()
     if form.validate_on_submit():
         if current_user.check_password(form.old_password.data):
@@ -377,6 +662,28 @@ def change_password():
 @application.route('/update_article', methods=['POST'])
 @login_required
 def update_article():
+    """
+        Обновить файл у статьи
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        security:
+           - basicAuth
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     form = UpdateArticle()
     block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
     if block is not None and (block.block_file):
@@ -387,7 +694,6 @@ def update_article():
     db.session.add(file)
     idfile = models.File.query.filter_by(drive_file_id=file.drive_file_id).first_or_404()
     article = models.Article.query.filter_by(id=id).first()
-    article.stat = 1
     article.file = idfile.id
     db.session.commit()
     return '<script>document.location.href = document.referrer</script>'
@@ -395,6 +701,26 @@ def update_article():
 @application.route('/send_message', methods=['GET', 'POST'])
 @login_required
 def send_message():
+    """
+    Чат
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     user = User.query.filter_by(username=current_user.username).first_or_404()
     messages = models.Message.query.filter_by(id_to=user.id).join(User, (User.id == models.Message.id_from)).all()
     messages += (models.Message.query.filter_by(id_from=user.id).join(User, (User.id == models.Message.id_to)).order_by(
@@ -460,6 +786,26 @@ def send_message():
 @application.route('/change_role', methods=['POST'])
 @login_required
 def change_role():
+    """
+    Изменить роль
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     if current_user.role == 2:
         bm = True if request.form.get('bm') else False
         ba = True if request.form.get('ba') else False
@@ -484,6 +830,26 @@ def change_role():
 @application.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
+    """
+        Список пользователей
+        Call this api passing a language name and get back its features
+        ---
+        tags:
+          - Awesomeness Language API
+        responses:
+          200:
+            description: html страница
+            parameters:
+              - name: "id"
+                in: "delete_news"
+                description: "ID новости"
+                required: true
+                type: "integer"
+                format: "int64"
+            content:
+                html страница
+
+        """
     users = []
     if request.args.get('search'):
         string = request.args['search']
@@ -508,7 +874,7 @@ def users():
             blockss[u.id]['bm'] = False
             blockss[u.id]['ba'] = False
             blockss[u.id]['bf'] = False
-        form = ChangeUser(id=u.id, role=u.role)
+        form = ChangeUser(user_id=u.id, role=u.role)
         #form.id.data = u.id
         #form.role.default = u.role
         forms[u.id] = form
@@ -524,5 +890,6 @@ def users():
     return render_template('users.html', title='Смена роли', users=users, blocks=blockss, forms=forms, roles=rolesss)
 
 if __name__ == '__main__':
-    socketio.run(application)
+    socketio.run(application, host='0.0.0.0')
+    #application.run()
 

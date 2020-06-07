@@ -11,8 +11,26 @@ from models import User
 
 @socketio.on('joined', namespace='/send_message')
 def joined(message):
-    """Sent by clients when they enter a room.
-    A status message is broadcast to all people in the room."""
+    """
+    Событие при входе
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     room = session.get('room')
     join_room(room)
     emit('status', {'msg': 'Собеседник вошел в чат'}, room=room)
@@ -20,8 +38,26 @@ def joined(message):
 
 @socketio.on('text', namespace='/send_message')
 def text(message):
-    """Sent by a client when the user entered a new message.
-    The message is sent to all people in the room."""
+    """
+    Событие при приеме сообщения
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     room = session.get('room')
     if not (message['msg'].strip() == ""):
         block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
@@ -34,8 +70,26 @@ def text(message):
 
 @socketio.on('left', namespace='/send_message')
 def left(message):
-    """Sent by clients when they leave a room.
-    A status message is broadcast to all people in the room."""
+    """
+    Событие при покидании чата
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+      - Awesomeness Language API
+    responses:
+      200:
+        description: html страница
+        parameters:
+          - name: "id"
+            in: "delete_news"
+            description: "ID новости"
+            required: true
+            type: "integer"
+            format: "int64"
+        content:
+            html страница
+
+    """
     room = session.get('room')
     leave_room(room)
     emit('status', {'msg': 'Собеседник покинул чат'}, room=room)
