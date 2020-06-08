@@ -3,15 +3,42 @@ Call this api passing a language name and get back its features
 ---
 tags:
   - Awesomeness Language API
+parameters:
+  - name: username
+    in: formData
+    description: username
+    required: true
+    type: string
+  - name: password
+    in: formData
+    description: password
+    required: true
+    type: string
+    format: password
+  - name: email
+    in: formData
+    description: email
+    required: true
+    type: string
+  - name: first_name
+    in: formData
+    description: first_name
+    required: true
+    type: string
+  - name: second_name
+    in: formData
+    description: first_name
+    required: true
+    type: string
+  - name: submit
+    in: formData
+    description: username
+    required: true
+    type: boolean
+    enum:
+      - true
 responses:
   200:
     description: html страница
-    parameters:
-      - name: "id"
-        in: "delete_news"
-        description: "ID новости"
-        required: true
-        type: "integer"
-        format: "int64"
     content:
         html страница

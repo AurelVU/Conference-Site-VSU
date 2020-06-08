@@ -1,14 +1,8 @@
-Список пользователей
+Страница добавления новостей
 Call this api passing a language name and get back its features
 ---
 tags:
   - Awesomeness Language API
-parameters:
-  - name: search
-    in: query
-    description: Начало username пользователя
-    required: true
-    type: string
 responses:
   200:
     description: html страница

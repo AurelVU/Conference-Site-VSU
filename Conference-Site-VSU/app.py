@@ -231,23 +231,38 @@ def add_compilation():
 @login_required
 def change_stat():
     """
-        Сменить статус статьи
-        Call this api passing a language name and get back its features
-        ---
-        tags:
-          - Awesomeness Language API
-        responses:
-          200:
-            description: html страница
-            parameters:
-              - name: "id"
-                in: "delete_news"
-                description: "ID новости"
-                required: true
-                type: "integer"
-                format: "int64"
-            content:
-                html страница
+        Изменить статус статьи
+    Call this api passing a language name and get back its features
+    ---
+    tags:
+        - Awesomeness Language API
+    parameters:
+      - name: stat
+        in: formData
+        description: Новый статус статьи. 1 - на рассмотрении, 2 - не принята, 3 - принята
+        required: true
+        type: int
+        enum:
+          - 1
+          - 2
+          - 3
+      - name: id
+        in: formData
+        description: id статьи
+        required: true
+        type: int
+      - name: submit
+        in: formData
+        description: username
+        required: true
+        type: boolean
+        enum:
+          - true
+    responses:
+      200:
+        description: html страница
+        content:
+            html страница
     """
     statuses = models.Status.query.all()
     st = [(i.id, i.name) for i in statuses]
@@ -266,26 +281,9 @@ def change_stat():
 
 @application.route('/add_news', methods=['GET', 'POST'])
 @login_required
+@swag_from('api/add_news_get.yml', methods=['GET'])
+@swag_from('api/add_news_post.yml', methods=['POST'])
 def add_news():
-    """
-    Добавить новость
-    Call this api passing a language name and get back its features
-    ---
-    tags:
-      - Awesomeness Language API
-    responses:
-      200:
-        description: html страница
-        parameters:
-          - name: "id"
-            in: "delete_news"
-            description: "ID новости"
-            required: true
-            type: "integer"
-            format: "int64"
-        content:
-            html страница
-    """
     form = AddNews()
     if current_user.role == 2:
         if form.is_submitted():
@@ -350,10 +348,10 @@ def article():
         return render_template('articles.html', form=form, updform=updform, forms=forms, na_rass=na_rass ,otclon=otclon, prin=prin, all=alll,  articles=articlesss)
 
 
-@application.route('/articles', methods=['GET', 'POST'])
+@application.route('/articles', methods=['GET'])#, 'POST'])
 @login_required
 @swag_from('api/articles_get.yml', methods=['GET'])
-@swag_from('api/articles_post.yml', methods=['POST'])
+#@swag_from('api/articles_post.yml', methods=['POST'])
 def articles():
     if current_user.role == 2 or current_user.role == 3:
         updform = UpdateArticle()
@@ -467,19 +465,17 @@ def download_file(file_id):
     ---
     tags:
       - Awesomeness Language API
+    parameters:
+      - name: file_id
+        in: path
+        description: ID файла в удаленном хранилище
+        required: true
+        type: string
     responses:
       200:
-        description: html страница
-        parameters:
-          - name: "id"
-            in: "delete_news"
-            description: "ID новости"
-            required: true
-            type: "integer"
-            format: "int64"
+        description: Файл
         content:
-            html страница
-
+            Файл
     """
     remove_folder_contents(UPLOAD_DIR)
     fl = models.File.query.filter_by(drive_file_id=file_id).first_or_404()
@@ -535,6 +531,24 @@ def update_article():
         ---
         tags:
           - Awesomeness Language API
+        consumes:
+            - multipart/form-data
+        parameters:
+          - in: formData
+            name: file
+            type: file
+            description: Прикрепленный файл
+          - in: formData
+            name: id
+            type: string
+            description: id статьи
+          - name: submit
+            in: formData
+            description: username
+            required: true
+            type: boolean
+            enum:
+              - true
         responses:
           200:
             description: html страница
@@ -563,7 +577,7 @@ def update_article():
     db.session.commit()
     return '<script>document.location.href = document.referrer</script>'
 
-@application.route('/send_message', methods=['GET', 'POST'])
+@application.route('/send_message', methods=['GET'])#, 'POST'])
 @login_required
 def send_message():
     """
@@ -572,16 +586,16 @@ def send_message():
     ---
     tags:
       - Awesomeness Language API
+    parameters:
+      - name: id_to
+        in: query
+        description: ID собеседника
+        required: true
+        type: integer
+        format: int64
     responses:
       200:
         description: html страница
-        parameters:
-          - name: "id"
-            in: "delete_news"
-            description: "ID новости"
-            required: true
-            type: "integer"
-            format: "int64"
         content:
             html страница
 
@@ -656,17 +670,40 @@ def change_role():
     Call this api passing a language name and get back its features
     ---
     tags:
-      - Awesomeness Language API
+        - Awesomeness Language API
+    parameters:
+      - name: bm
+        in: formData
+        description: Блокировка сообщений
+        required: true
+        type: boolean
+        enum:
+          - true
+          - false
+      - name: ba
+        in: formData
+        description: Блокировка загрузки статей
+        required: true
+        type: boolean
+        enum:
+          - true
+          - false
+      - name: bf
+        in: formData
+        description: Блокировка загрузки файлов
+        required: true
+        type: boolean
+        enum:
+          - true
+          - false
+      - name: id
+        in: formData
+        description: username
+        required: true
+        type: int
     responses:
       200:
         description: html страница
-        parameters:
-          - name: "id"
-            in: "delete_news"
-            description: "ID новости"
-            required: true
-            type: "integer"
-            format: "int64"
         content:
             html страница
 

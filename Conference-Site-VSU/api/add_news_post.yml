@@ -1,18 +1,19 @@
+Страница добавления новостей
 Call this api passing a language name and get back its features
 ---
 tags:
   - Awesomeness Language API
-consumes:
-   - multipart/form-data
 parameters:
-  - in: formData
-    name: file
-    type: file
-    description: Прикрепленный файл
-  - in: formData
-    name: name
+  - name: title
+    in: formData
+    description: title
+    required: true
     type: string
-    description: Название статьи
+  - name: text
+    in: formData
+    description: text
+    required: true
+    type: string
   - name: submit
     in: formData
     description: username
