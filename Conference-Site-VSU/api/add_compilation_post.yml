@@ -1,5 +1,6 @@
 Добавить сборник
-Call this api passing a language name and get back its features
+POST запрос для передачи данных при добавлении сборника в систему.
+Доступно Администратору после авторизации кроме случая блокировки загрузки файлов.
 ---
 tags:
   - Awesomeness Language API
@@ -13,20 +14,20 @@ parameters:
   - in: formData
     name: ico
     type: file
-    description: Прикрепленная иконка
+    description: Прикрепленная иконка файла
   - in: formData
     name: name
     type: string
     description: Название статьи
   - name: submit
     in: formData
-    description: username
+    description: Нажатие кнопки
     required: true
     type: boolean
     enum:
       - true
 responses:
   200:
-    description: html страница
+    description: редирект на html страницу Архива работ
     content:
         html страница

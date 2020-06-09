@@ -11,11 +11,13 @@
                 <div id="card-curators" class="row mb-3 mr-1 ml-1" style="min-width: 220px;" >
 
                     <div class="card col-md-6 col-sm-2" style="padding:0; background-color: rgba(236, 231, 231, 0.3); border-radius: 1rem;">
-                        <div class="card-body" style="padding:1rem;">
+                        <div class="card-body" style="padding:2rem;">
+                            <h5 style="margin-bottom: 10px">Ваши сообщения</h5>
+                            <div class="card mb-3" style="hight: 1px; background-color: #e4e4e4;"></div>
                             <style>
                             .scroll_post {
                             height: 25rem; /* высота нашего блока */
-                            width: 20rem; /* ширина нашего блока */
+                            max-width: 25rem; /* ширина нашего блока */
                             background: none; /* цвет фона, белый */
                             border: none; /* размер и цвет границы блока */
                             overflow-y: scroll; /* прокрутка по вертикали */
@@ -46,7 +48,7 @@
                             }
 
                             </style>
-                            <div class="scroll_post" id="style-11">
+                            <div class="scroll_post" id="style-11" style="margin:auto;">
                                 {% for post in posts %}
                                     {% include '_post.html' %}
                                 {% endfor %}

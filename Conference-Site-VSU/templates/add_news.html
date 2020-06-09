@@ -12,16 +12,15 @@
                 <button type="button" onclick="history.back();"  class="btn btn-outline-secondary mb-3" style="width: 100px; hight: 30px; padding:1%">Назад</button>
 
                 <!-- {{ wtf.quick_form(form) }} -->
-                <form action="" method="post" role="form">
-
-                    {{form.hidden_tag()}}
-                <div class="row">
-                        <p class="col">{{ form.title(class_='form-control', style='outline : none; resize : none;') }}</p>
-                        <p class="col">{{ form.text(class_='form-control', style='outline : none; resize : none;') }}</p>
+                <div class="card bg-dark mb-4" style="hight: 1px"></div>
+                <div class="row" >
+                    <form action="" method="post" role="form" style="margin: auto; min-width:350px;">
+                        {{form.hidden_tag()}}
+                        <p class="col">{{ form.title.label() }}{{ form.title(class_='form-control', style='outline : none; resize : none;') }}</p>
+                        <p class="col">{{ form.text.label() }}{{ form.text(class_='form-control', style='outline : none; resize : none;') }}</p>
                         <a class="col">{{ form.submit(class_='btn btn-outline-primary') }}</a>
+                    </form>
                 </div>
-
-                </form>
             </div>
         </div>
     </div>

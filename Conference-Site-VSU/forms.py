@@ -73,12 +73,12 @@ class ChangeUser(FlaskForm):
 
 
 class AddNews(FlaskForm):
-    title = StringField('Заголовок', validators=[Length(min=0, max=250)])
-    text = TextAreaField('Текст новости', validators=[Length(min=0, max=5000)])
+    title = StringField('Заголовок:', validators=[Length(min=0, max=250)])
+    text = TextAreaField('Текст новости:', validators=[Length(min=0, max=5000)])
     submit = SubmitField('Отправить')
 
 class AddCompilation(FlaskForm):
-    name = StringField(validators=[DataRequired()])
+    name = StringField('Введите название сборника', validators=[DataRequired()])
     file = FileField(validators=[DataRequired(), FileRequired(), FileAllowed(['pdf'], 'Только документы формата pdf')])
     ico = FileField(validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png'],
                     'Только "jpg", "jpeg" и "png" файлы поддерживаются')])
