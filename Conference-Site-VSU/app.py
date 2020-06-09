@@ -306,10 +306,30 @@ def article():
     updform = UpdateArticle()
     form = UploadArticle()
     fromDate = datetime.now() - timedelta(days=365)
-    na_rass = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=1).count()
-    otclon = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=2).count()
-    prin = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=3).count()
-    alll = models.Article.query.filter(models.Article.timestamp >= fromDate).count()
+    na_rass = 0
+    rrr = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=1).all()
+    for r in rrr:
+        f = models.File.query.filter_by(id=r.file).first()
+        if f.owner == current_user.id:
+            na_rass += 1
+    otclon = 0
+    rrr = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=2).all()
+    for r in rrr:
+        f = models.File.query.filter_by(id=r.file).first()
+        if f.owner == current_user.id:
+            otclon += 1
+    prin = 0
+    rrr = models.Article.query.filter(models.Article.timestamp >= fromDate).filter_by(stat=3).all()
+    for r in rrr:
+        f = models.File.query.filter_by(id=r.file).first()
+        if f.owner == current_user.id:
+            prin += 1
+    alll = 0
+    rrr = models.Article.query.filter(models.Article.timestamp >= fromDate).all()
+    for r in rrr:
+        f = models.File.query.filter_by(id=r.file).first()
+        if f.owner == current_user.id:
+            alll += 1
     if form.submit.data:
         block = models.BlockUser.query.filter_by(id_user=current_user.id).first()
         if (block is None) or not (block.block_article):
