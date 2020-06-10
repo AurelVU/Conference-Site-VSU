@@ -14,6 +14,7 @@ from flasgger import Swagger, swag_from
 
 from init import application, db, socketio
 
+
 Swagger(application)
 import events
 
