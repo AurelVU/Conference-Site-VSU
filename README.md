@@ -28,5 +28,5 @@
 | Участник | Роль |
 |---------|-------------|
 | Владимир Ушаков |	back-end / Architecture |
-| Светлана Воронцова | front-end / design / QA Architecture |
-| Кристина Малышева | BA / PM / QA / Architecture |
+| Светлана Воронцова | front-end / design / QA |
+| Кристина Малышева | BA / PM / QA |
