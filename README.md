@@ -18,7 +18,7 @@
 
 [Диаграммы](https://drive.google.com/file/d/1x1laUf76Dv2D-_XToOrk3S2qDLqoPx_w/view)
 
-[Презентация](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9F%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F.pptx)
+[Презентация-предварительная версия](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9F%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%82%D0%B0%D1%86%D0%B8%D1%8F.pptx)
 
 Данный сервис реализует функциональные возможности, помогающий организовать процесс сбора статей и централизованного общения с пользователями, которые подали статью
 Данный сервис позволяет производить регистрацию пользователей и редакторов на сайте.
