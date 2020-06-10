@@ -8,6 +8,8 @@
 
 [Ссылка на Figma](https://www.figma.com/file/JL1r2UOqa9HbH7RM5XHiO5/Project)
 
+Демо видео: https://www.youtube.com/watch?v=w1jxZ4LlDR4&feature=youtu.be
+
 Курсовой проект: [Курсовой проект.pdf](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9A%D1%83%D1%80%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82.pdf), или же [Курсовой проект.docx](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9A%D1%83%D1%80%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82.docx)
 
 Техническое задание: [Техническое задание.pdf](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5.PDF), или же [Техническое задание.docx](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5%20%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5.docx)
