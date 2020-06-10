@@ -1,11 +1,19 @@
 Логин
-Call this api passing dgvdfgdfgdfgdfgsdfgsdfa language name and get back its features
+URL на который перенаправить после авторизации (относительно корня сайта). Например, на Главную страницу ("/").
 ---
 tags:
   - Awesomeness Language API
 responses:
   200:
-    description: html страница
-
-    content:
-        html страница
+    description:
+      Отображает главную страницу, если пользователь авторизован( ему доступен вход в свой кабинет).
+      Иначе отображает страницу Авторизации.
+  400:
+    description:
+      Некорректный запрос.
+  404:
+    description:
+      Ошибка запроса. Страница не существует.
+  500:
+    description:
+      Невозможно обработать входные данные.

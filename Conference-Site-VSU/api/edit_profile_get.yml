@@ -1,17 +1,22 @@
 Изменить профиль
-Call this api passing a language name and get back its features
+Данная страница доступна всем пользователям в их профиле.
 ---
 tags:
   - Awesomeness Language API
 responses:
   200:
-    description: html страница
-    parameters:
-      - name: "id"
-        in: "delete_news"
-        description: "ID новости"
-        required: true
-        type: "integer"
-        format: "int64"
-    content:
-        html страница
+    description:
+      Отображает html страницу Изменить профиль с навбаром авторизированного пользователя, кнопкой Назад,
+      полями ввода email, имени, фамилии, информацией о пользователе, кнопкой отправки изменений профиля, ссылкой на страницу Изменить пароль.
+  302:
+    description:
+      Если пользователь не авторизован, то редирект на страницу Авторизации.
+  400:
+    description:
+      Некорректный запрос.
+  404:
+    description:
+      Ошибка запроса. Страница не существует.
+  500:
+    description:
+      Невозможно обработать входные данные.

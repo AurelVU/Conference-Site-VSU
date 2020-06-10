@@ -1,5 +1,6 @@
 Изменить профиль
-Call this api passing a language name and get back its features
+POST запрос для передачи данных при внесении изменений в систему.
+Доступно атворизированным пользователям в их профиле.
 ---
 tags:
   - Awesomeness Language API
@@ -33,6 +34,15 @@ parameters:
       - true
 responses:
   200:
-    description: html страница
-    content:
-        html страница
+    description:
+      Осуществляется редирект на страницу Изменить профиль.
+      Если пользователь не авторизован, то редирект на страницу Авторизации.
+  400:
+    description:
+      Некорректный запрос.
+  404:
+    description:
+      Ошибка запроса. Страница не существует.
+  500:
+    description:
+      Невозможно обработать входные данные.

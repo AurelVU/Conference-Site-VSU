@@ -1,5 +1,6 @@
 Логин
-Call fgdlgkdflgkdflk;this api passing a language name and get back its features
+POST запрос для передачи данных при авторизации пользователя в системе.
+Доступно всем пользователям.
 ---
 tags:
   - Awesomeness Language API
@@ -29,7 +30,15 @@ parameters:
     default: true
 responses:
   200:
-    description: html страница
-
-    content:
-        html страница
+    description:
+      Перенаправляет на главную страницу, если пользователь авторизован, ему доступен вход в свой кабинет.
+      Иначе перенаправляет на страницу Авторизации.
+  400:
+    description:
+      Некорректный запрос.
+  404:
+    description:
+      Ошибка запроса. Страница не существует.
+  500:
+    description:
+      Невозможно обработать входные данные.
