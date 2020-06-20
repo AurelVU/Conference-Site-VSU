@@ -10,7 +10,9 @@
 
 Видеопрезентация: https://www.youtube.com/watch?v=Td6kXDGk8m0&feature=youtu.be
 
-Демо видео: https://www.youtube.com/watch?v=w1jxZ4LlDR4&feature=youtu.be
+Демо видео обновленное (с упором в рассказ о реализации): https://www.youtube.com/watch?v=kOZina59o3U&feature=youtu.be
+
+Демо видео первоначальное: https://www.youtube.com/watch?v=w1jxZ4LlDR4&feature=youtu.be
 
 Курсовой проект: [Курсовой проект.pdf](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9A%D1%83%D1%80%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82.pdf), или же [Курсовой проект.docx](https://github.com/AurelVU/Conference-Site-VSU/blob/master/%D0%9A%D1%83%D1%80%D1%81%D0%BE%D0%B2%D0%BE%D0%B9%20%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82.docx)
 
